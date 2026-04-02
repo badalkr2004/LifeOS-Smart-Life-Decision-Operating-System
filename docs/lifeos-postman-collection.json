@@ -1,0 +1,1488 @@
+{
+  "info": {
+    "name": "LifeOS API",
+    "description": "Comprehensive Postman collection for LifeOS API testing. Includes variables and automated token/ID capture.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "root_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refresh_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "decision_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "outcome_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "reminder_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "insight_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "session_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "notification_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "framework_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "template_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{root_url}}/health",
+          "host": [
+            "{{root_url}}"
+          ],
+          "path": [
+            "health"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.accessToken) {",
+                  "    pm.collectionVariables.set(\"access_token\", jsonData.accessToken);",
+                  "}",
+                  "if (jsonData.refreshToken) {",
+                  "    pm.collectionVariables.set(\"refresh_token\", jsonData.refreshToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"testuser@example.com\",\n  \"password\": \"SecureP@ssword123\",\n  \"firstName\": \"Test\",\n  \"lastName\": \"User\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.accessToken) {",
+                  "    pm.collectionVariables.set(\"access_token\", jsonData.accessToken);",
+                  "}",
+                  "if (jsonData.refreshToken) {",
+                  "    pm.collectionVariables.set(\"refresh_token\", jsonData.refreshToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"testuser@example.com\",\n  \"password\": \"SecureP@ssword123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.accessToken) {",
+                  "    pm.collectionVariables.set(\"access_token\", jsonData.accessToken);",
+                  "}",
+                  "if (jsonData.refreshToken) {",
+                  "    pm.collectionVariables.set(\"refresh_token\", jsonData.refreshToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refresh_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/refresh",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "refresh"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refresh_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{access_token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "item": [
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Current User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Smith\",\n  \"displayName\": \"Jane Smith\",\n  \"timezone\": \"America/New_York\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/me/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "me",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bio\": \"Software engineer passionate about life optimization.\",\n  \"occupation\": \"Senior Software Engineer\",\n  \"location\": \"San Francisco, CA\",\n  \"defaultCheckInIntervals\": [\"1_week\", \"1_month\", \"6_months\"],\n  \"notificationPreferences\": {\n    \"email\": true,\n    \"push\": true,\n    \"sms\": false,\n    \"frequency\": \"weekly\"\n  },\n  \"privacySettings\": {\n    \"shareAnonymousData\": true,\n    \"allowAITraining\": false,\n    \"publicProfile\": false\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/me/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "me",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Account",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Decisions",
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{access_token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "item": [
+        {
+          "name": "Create Decision",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.id) {",
+                  "    pm.collectionVariables.set(\"decision_id\", jsonData.data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Accept senior engineering role at TechCorp\",\n  \"category\": \"career\",\n  \"description\": \"Evaluating a job offer from TechCorp with 40% salary increase.\",\n  \"context\": \"Currently a mid-level eng at OldCo. Feeling limited in growth.\",\n  \"reasoningProcess\": \"Used pro/con analysis. TechCorp has better growth potential.\",\n  \"alternativesConsidered\": [\n    {\n      \"option\": \"Stay at OldCo\",\n      \"prosAndCons\": {\n        \"pros\": [\"Job security\", \"Familiar team\"],\n        \"cons\": [\"No salary increase\", \"Limited growth\"]\n      },\n      \"whyNotChosen\": \"Growth ceiling too low\"\n    }\n  ],\n  \"expectedOutcomes\": [\n    {\n      \"outcome\": \"Salary increase\",\n      \"metric\": \"annual_salary\",\n      \"targetValue\": 140000,\n      \"timeframe\": \"immediate\",\n      \"importance\": 4\n    }\n  ],\n  \"confidenceLevel\": 8,\n  \"frameworkUsed\": \"Pro/Con Analysis\",\n  \"tags\": [\"career\", \"salary\", \"growth\"],\n  \"isPrivate\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/decisions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "decisions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Decisions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/decisions?page=1&limit=10&category=career&sortBy=decisionDate&sortOrder=desc",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "decisions"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "category",
+                  "value": "career"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "decisionDate"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Decision",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/decisions/{{decision_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "decisions",
+                "{{decision_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Decision",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"archived\",\n  \"confidenceLevel\": 9,\n  \"tags\": [\"career\", \"salary\", \"completed\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/decisions/{{decision_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "decisions",
+                "{{decision_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Decision",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/decisions/{{decision_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "decisions",
+                "{{decision_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Outcomes & Check-ins",
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{access_token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "item": [
+        {
+          "name": "Create Outcome",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.id) {",
+                  "    pm.collectionVariables.set(\"outcome_id\", jsonData.data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"decisionId\": \"{{decision_id}}\",\n  \"satisfactionScore\": 8,\n  \"actualResults\": \"Joined TechCorp. Salary at $140k. Loving the work.\",\n  \"metrics\": [\n    {\n      \"metric\": \"annual_salary\",\n      \"value\": 140000,\n      \"unit\": \"USD\",\n      \"vsExpected\": \"as_expected\"\n    }\n  ],\n  \"reflections\": \"Good decision overall. Team culture is excellent.\",\n  \"wouldDecideAgain\": true,\n  \"moodAtCheckIn\": 8,\n  \"stressLevel\": 4\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/outcomes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "outcomes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Outcomes for Decision",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/outcomes?decision_id={{decision_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "outcomes"
+              ],
+              "query": [
+                {
+                  "key": "decision_id",
+                  "value": "{{decision_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Outcome",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/outcomes/{{outcome_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "outcomes",
+                "{{outcome_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Outcome",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"satisfactionScore\": 9,\n  \"reflections\": \"Updated: Even better after 3 months.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/outcomes/{{outcome_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "outcomes",
+                "{{outcome_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Outcome",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/outcomes/{{outcome_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "outcomes",
+                "{{outcome_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Schedule Check-in",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.id) {",
+                  "    pm.collectionVariables.set(\"reminder_id\", jsonData.data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"decisionId\": \"{{decision_id}}\",\n  \"scheduledDate\": \"2026-12-31T09:00:00.000Z\",\n  \"reminderType\": \"3_months\",\n  \"customMessage\": \"Time to check in on your TechCorp decision!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/outcomes/schedule-checkin",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "outcomes",
+                "schedule-checkin"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Pending Check-ins",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/outcomes/pending-checkins",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "outcomes",
+                "pending-checkins"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Complete Check-in",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/outcomes/checkins/{{reminder_id}}/complete",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "outcomes",
+                "checkins",
+                "{{reminder_id}}",
+                "complete"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Skip Check-in",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/outcomes/checkins/{{reminder_id}}/skip",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "outcomes",
+                "checkins",
+                "{{reminder_id}}",
+                "skip"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Analytics",
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{access_token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "item": [
+        {
+          "name": "Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analytics/summary",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analytics",
+                "summary"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Patterns",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analytics/patterns?category=career",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analytics",
+                "patterns"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "career"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Decision Quality Over Time",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analytics/decision-quality-over-time",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analytics",
+                "decision-quality-over-time"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Insights",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.length > 0) {",
+                  "    pm.collectionVariables.set(\"insight_id\", jsonData.data[0].id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analytics/insights",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analytics",
+                "insights"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Dismiss Insight",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analytics/insights/{{insight_id}}/dismiss",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analytics",
+                "insights",
+                "{{insight_id}}",
+                "dismiss"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "AI Engine",
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{access_token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "item": [
+        {
+          "name": "Analyze Decision",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"decisionId\": \"{{decision_id}}\",\n  \"prompt\": \"Help me analyze the risks of this decision.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/ai/analyze-decision",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ai",
+                "analyze-decision"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Recommend Approach",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"decisionId\": \"{{decision_id}}\",\n  \"prompt\": \"What framework should I use?\",\n  \"context\": { \"urgency\": \"medium\", \"reversibility\": \"low\" }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/ai/recommend-approach",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ai",
+                "recommend-approach"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Similar Decisions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/ai/similar-decisions?decision_id={{decision_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ai",
+                "similar-decisions"
+              ],
+              "query": [
+                {
+                  "key": "decision_id",
+                  "value": "{{decision_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Chat with AI Advisor (New Session)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.sessionId) {",
+                  "    pm.collectionVariables.set(\"session_id\", jsonData.data.sessionId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"I'm considering a major career switch. How should I approach it?\",\n  \"decisionId\": \"{{decision_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/ai/chat",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ai",
+                "chat"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Chat with AI Advisor (Continue Session)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"My main concern is financial stability during the transition.\",\n  \"sessionId\": \"{{session_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/ai/chat",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ai",
+                "chat"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Chat Sessions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/ai/chat/sessions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ai",
+                "chat",
+                "sessions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Chat History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/ai/chat/sessions/{{session_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ai",
+                "chat",
+                "sessions",
+                "{{session_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{access_token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "item": [
+        {
+          "name": "List Notifications",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.length > 0) {",
+                  "    pm.collectionVariables.set(\"notification_id\", jsonData.data[0].id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/notifications",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "notifications"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Mark Notification as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/notifications/{{notification_id}}/read",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "notifications",
+                "{{notification_id}}",
+                "read"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Mark All as Read",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/notifications/mark-all-read",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "notifications",
+                "mark-all-read"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Notification",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/notifications/{{notification_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "notifications",
+                "{{notification_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Frameworks",
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{access_token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "item": [
+        {
+          "name": "Create Framework",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.id) {",
+                  "    pm.collectionVariables.set(\"framework_id\", jsonData.data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"My Custom Decision Framework\",\n  \"description\": \"Personal framework optimized for career choices.\",\n  \"category\": \"career\",\n  \"isPublic\": false,\n  \"framework\": {\n    \"steps\": [\n      {\n        \"title\": \"Assess impact\",\n        \"description\": \"Look at short and long-term effects.\",\n        \"questions\": [\"What are the risks?\"]\n      }\n    ],\n    \"criteria\": [\n      { \"name\": \"Growth\", \"weight\": 0.5 },\n      { \"name\": \"Stability\", \"weight\": 0.5 }\n    ]\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/frameworks",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "frameworks"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Frameworks",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/frameworks",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "frameworks"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Framework",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/frameworks/{{framework_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "frameworks",
+                "{{framework_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Framework",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isPublic\": true,\n  \"description\": \"Updated description — now sharing publicly.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/frameworks/{{framework_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "frameworks",
+                "{{framework_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Framework",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/frameworks/{{framework_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "frameworks",
+                "{{framework_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Templates",
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{access_token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "item": [
+        {
+          "name": "Create Template",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.id) {",
+                  "    pm.collectionVariables.set(\"template_id\", jsonData.data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Investment Decision Template\",\n  \"description\": \"Template for evaluating financial investments.\",\n  \"category\": \"financial\",\n  \"isPublic\": false,\n  \"template\": {\n    \"titlePrompt\": \"Describe the investment in one sentence.\",\n    \"descriptionPrompt\": \"What opportunity are you evaluating?\",\n    \"contextQuestions\": [\n      \"What is the investment amount?\",\n      \"What is your risk tolerance?\"\n    ],\n    \"expectedOutcomePrompts\": [\n      \"What ROI do you expect?\",\n      \"What is the investment timeline?\"\n    ],\n    \"suggestedTags\": [\"investment\", \"financial\", \"risk\"],\n    \"checkInIntervals\": [\"3_months\", \"6_months\", \"1_year\"]\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/templates",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "templates"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Templates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/templates?category=financial",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "templates"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "financial"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Template",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/templates/{{template_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "templates",
+                "{{template_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Template",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Investment Decision Template v2\",\n  \"isPublic\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/templates/{{template_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "templates",
+                "{{template_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Template",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/templates/{{template_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "templates",
+                "{{template_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

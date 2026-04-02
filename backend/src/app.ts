@@ -13,32 +13,32 @@ import templateRoutes from "./routes/template.routes";
 import { errorHandler } from "./middleware/error.middleware";
 
 export const createApp = (): Express => {
-    const app = express();
+  const app = express();
 
-    // Middleware
-    app.use(helmet());
-    app.use(cors());
-    app.use(express.json());
-    app.use(express.urlencoded({ extended: true }));
+  // Middleware
+  app.use(helmet());
+  app.use(cors());
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
 
-    // Basic Health Check Route
-    app.get("/health", (req: Request, res: Response) => {
-        res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
-    });
+  // Basic Health Check Route
+  app.get("/health", (req: Request, res: Response) => {
+    res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
+  });
 
-    // API Routes
-    app.use("/api/v1/auth", authRoutes);
-    app.use("/api/v1/users", userRoutes);
-    app.use("/api/v1/decisions", decisionRoutes);
-    app.use("/api/v1/outcomes", outcomeRoutes);
-    app.use("/api/v1/analytics", analyticsRoutes);
-    app.use("/api/v1/ai", aiRoutes);
-    app.use("/api/v1/notifications", notificationRoutes);
-    app.use("/api/v1/frameworks", frameworkRoutes);
-    app.use("/api/v1/templates", templateRoutes);
+  // API Routes
+  app.use("/api/v1/auth", authRoutes);
+  app.use("/api/v1/users", userRoutes);
+  app.use("/api/v1/decisions", decisionRoutes);
+  app.use("/api/v1/outcomes", outcomeRoutes);
+  app.use("/api/v1/analytics", analyticsRoutes);
+  app.use("/api/v1/ai", aiRoutes);
+  app.use("/api/v1/notifications", notificationRoutes);
+  app.use("/api/v1/frameworks", frameworkRoutes);
+  app.use("/api/v1/templates", templateRoutes);
 
-    // Global error handler (must be last)
-    app.use(errorHandler);
+  // Global error handler (must be last)
+  app.use(errorHandler);
 
-    return app;
+  return app;
 };

@@ -1,0 +1,56 @@
+/* global.css */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css";
+
+@import "nativewind/theme";
+
+@theme {
+  /* Surfaces */
+  --color-surface: #f9fafb;
+  --color-surface-low: #f3f4f5;
+  --color-surface-lowest: #ffffff;
+  --color-surface-container: #edeeef;
+  --color-surface-dim: #d9dadb;
+
+  /* Text */
+  --color-text-primary: #111827;
+  --color-text-secondary: #6b7280;
+  --color-text-muted: #464555;
+  --color-outline: #777587;
+  --color-outline-variant: #c7c4d8;
+
+  /* Brand / Accent */
+  --color-primary: #4f46e5;
+  --color-primary-dark: #3525cd;
+  --color-primary-fixed: #e2dfff;
+  --color-primary-container: #4f46e5;
+
+  /* Status */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+
+  /* Dark Mode (Example mapping) */
+  --color-dark-surface: #0f172a;
+  --color-dark-surface-card: #1e293b;
+  --color-dark-text: #f8fafc;
+  --color-dark-text-muted: #94a3b8;
+  --color-dark-outline: #334155;
+
+  /* Fonts - In v5, use the 'font-' prefix */
+  --font-sans: Inter_400Regular;
+  --font-medium: Inter_500Medium;
+  --font-semibold: Inter_600SemiBold;
+  --font-bold: Inter_700Bold;
+  --font-extrabold: Inter_800ExtraBold;
+  --font-black: Inter_900Black;
+
+  /* Border Radius */
+  --radius-default: 16px;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-full: 9999px;
+}
