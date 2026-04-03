@@ -62,10 +62,18 @@ const InputField: React.FC<InputFieldProps> = ({
     });
 
     return (
-        <View className="mb-5">
+        <View style={{ marginBottom: 20 }}>
             <Text
-                className="text-[10px] font-bold uppercase mb-2 ml-4"
-                style={{ color: '#464555', letterSpacing: 1.5 }}
+                style={{
+                    fontSize: 10,
+                    fontWeight: 'bold',
+                    textTransform: 'uppercase',
+                    marginBottom: 8,
+                    marginLeft: 16,
+                    color: '#464555',
+                    letterSpacing: 1.5,
+                    fontFamily: 'Inter_700Bold',
+                }}
             >
                 {label}
             </Text>
@@ -88,8 +96,7 @@ const InputField: React.FC<InputFieldProps> = ({
                     style={{ marginRight: 10 }}
                 />
                 <TextInput
-                    className="flex-1 text-base"
-                    style={{ color: '#111827', height: 56, fontFamily: 'Inter_400Regular' }}
+                    style={{ flex: 1, fontSize: 16, color: '#111827', height: 56, fontFamily: 'Inter_400Regular' }}
                     placeholder={placeholder}
                     placeholderTextColor="rgba(119,117,135,0.5)"
                     value={value}
@@ -149,11 +156,11 @@ export default function LoginScreen() {
     };
 
     return (
-        <SafeAreaView className="flex-1" style={{ backgroundColor: '#F9FAFB' }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#F9FAFB' }}>
             <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
 
             <KeyboardAvoidingView
-                className="flex-1"
+                style={{ flex: 1 }}
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             >
                 <ScrollView
@@ -167,7 +174,7 @@ export default function LoginScreen() {
                     keyboardShouldPersistTaps="handled"
                 >
                     {/* ── Logo ── */}
-                    <View className="items-center mb-14">
+                    <View style={{ alignItems: 'center', marginBottom: 56 }}>
                         <LinearGradient
                             colors={['#3525CD', '#4F46E5']}
                             start={{ x: 0, y: 0 }}
@@ -246,7 +253,7 @@ export default function LoginScreen() {
                         />
 
                         {/* Forgot password */}
-                        <TouchableOpacity className="self-end -mt-2 mb-8 pr-2">
+                        <TouchableOpacity style={{ alignSelf: 'flex-end', marginTop: -8, marginBottom: 32, paddingRight: 8 }}>
                             <Text
                                 style={{
                                     fontFamily: 'Inter_600SemiBold',
@@ -307,17 +314,15 @@ export default function LoginScreen() {
                     </View>
 
                     {/* ── Footer ── */}
-                    <View className="items-center mt-14">
+                    <View style={{ alignItems: 'center', marginTop: 56 }}>
                         <Text
-                            style={{ fontFamily: 'Inter_500Medium', fontSize: 14, color: '#6B7280' }}
-                            className="mb-3"
+                            style={{ fontFamily: 'Inter_500Medium', fontSize: 14, color: '#6B7280', marginBottom: 12 }}
                         >
                             New to the sanctuary?
                         </Text>
                         <TouchableOpacity
                             onPress={() => router.push('/(auth)/register')}
-                            className="px-8 py-3 rounded-full"
-                            style={{ backgroundColor: 'rgba(79,70,229,0.06)' }}
+                            style={{ paddingHorizontal: 32, paddingVertical: 12, borderRadius: 9999, backgroundColor: 'rgba(79,70,229,0.06)' }}
                         >
                             <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 14, color: '#4F46E5' }}>
                                 Create Account

@@ -31,7 +31,7 @@ type InputFieldProps = {
     keyboardType?: React.ComponentProps<typeof TextInput>['keyboardType'];
     autoCapitalize?: React.ComponentProps<typeof TextInput>['autoCapitalize'];
     rightElement?: React.ReactNode;
-    pill?: boolean; // true = borderRadius 9999, false = 16 (card inputs)
+    pill?: boolean;
 };
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -54,7 +54,7 @@ const InputField: React.FC<InputFieldProps> = ({
     });
 
     return (
-        <View className="flex-1">
+        <View style={{ flex: 1 }}>
             <Text
                 style={{
                     fontFamily: 'Inter_700Bold',
@@ -87,8 +87,9 @@ const InputField: React.FC<InputFieldProps> = ({
                     style={{ marginRight: 10 }}
                 />
                 <TextInput
-                    className="flex-1 text-sm"
                     style={{
+                        flex: 1,
+                        fontSize: 14,
                         color: '#111827',
                         height: 56,
                         fontFamily: 'Inter_400Regular',
@@ -119,7 +120,7 @@ const InputField: React.FC<InputFieldProps> = ({
 // ─── Step Dots ────────────────────────────────────────────────────────────────
 
 const StepDots: React.FC<{ step: number; total: number }> = ({ step, total }) => (
-    <View className="flex-row items-center mb-6">
+    <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 24 }}>
         {Array.from({ length: total }).map((_, i) => (
             <View
                 key={i}
@@ -152,8 +153,8 @@ const PasswordStrength: React.FC<{ password: string }> = ({ password }) => {
     const { score, label, color } = getStrength();
 
     return (
-        <View className="mt-3 mb-1">
-            <View className="flex-row gap-1 mb-1">
+        <View style={{ marginTop: 12, marginBottom: 4 }}>
+            <View style={{ flexDirection: 'row', gap: 4, marginBottom: 4 }}>
                 {[1, 2, 3, 4].map(i => (
                     <View
                         key={i}
@@ -259,22 +260,21 @@ export default function RegisterScreen() {
     };
 
     return (
-        <SafeAreaView className="flex-1" style={{ backgroundColor: '#F9FAFB' }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#F9FAFB' }}>
             <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
 
             {/* Back button */}
-            <View className="px-6 pt-2">
+            <View style={{ paddingHorizontal: 24, paddingTop: 8 }}>
                 <TouchableOpacity
                     onPress={handleBack}
-                    className="self-start p-2 rounded-full"
-                    style={{ backgroundColor: '#EDEEEF' }}
+                    style={{ alignSelf: 'flex-start', padding: 8, borderRadius: 9999, backgroundColor: '#EDEEEF' }}
                 >
                     <Ionicons name="arrow-back" size={20} color="#111827" />
                 </TouchableOpacity>
             </View>
 
             <KeyboardAvoidingView
-                className="flex-1"
+                style={{ flex: 1 }}
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             >
                 <ScrollView
@@ -288,7 +288,7 @@ export default function RegisterScreen() {
                     keyboardShouldPersistTaps="handled"
                 >
                     {/* ── Header ── */}
-                    <View className="mb-8">
+                    <View style={{ marginBottom: 32 }}>
                         <StepDots step={step} total={2} />
 
                         <Text
@@ -313,7 +313,7 @@ export default function RegisterScreen() {
                     {step === 1 && (
                         <SurfaceCard>
                             {/* First + Last Name row */}
-                            <View className="flex-row gap-3 mb-5">
+                            <View style={{ flexDirection: 'row', gap: 12, marginBottom: 20 }}>
                                 <InputField
                                     label="First"
                                     placeholder="Jane"
@@ -335,8 +335,13 @@ export default function RegisterScreen() {
 
                             {/* Info chip */}
                             <View
-                                className="flex-row items-center rounded-2xl p-4"
-                                style={{ backgroundColor: 'rgba(79,70,229,0.05)' }}
+                                style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    borderRadius: 16,
+                                    padding: 16,
+                                    backgroundColor: 'rgba(79,70,229,0.05)',
+                                }}
                             >
                                 <Ionicons name="sparkles-outline" size={15} color="#4F46E5" />
                                 <Text
@@ -359,7 +364,7 @@ export default function RegisterScreen() {
                     {step === 2 && (
                         <SurfaceCard>
                             {/* Email */}
-                            <View className="mb-5">
+                            <View style={{ marginBottom: 20 }}>
                                 <InputField
                                     label="Email Address"
                                     placeholder="jane@example.com"
@@ -371,7 +376,7 @@ export default function RegisterScreen() {
                             </View>
 
                             {/* Password */}
-                            <View className="mb-2">
+                            <View style={{ marginBottom: 8 }}>
                                 <InputField
                                     label="Password"
                                     placeholder="Min. 8 characters"
@@ -396,7 +401,7 @@ export default function RegisterScreen() {
                             </View>
 
                             {/* Confirm */}
-                            <View className="mt-3">
+                            <View style={{ marginTop: 12 }}>
                                 <InputField
                                     label="Confirm Password"
                                     placeholder="Re-enter password"
@@ -483,17 +488,15 @@ export default function RegisterScreen() {
                     </Animated.View>
 
                     {/* ── Footer ── */}
-                    <View className="items-center mt-10">
+                    <View style={{ alignItems: 'center', marginTop: 40 }}>
                         <Text
-                            style={{ fontFamily: 'Inter_500Medium', fontSize: 14, color: '#6B7280' }}
-                            className="mb-3"
+                            style={{ fontFamily: 'Inter_500Medium', fontSize: 14, color: '#6B7280', marginBottom: 12 }}
                         >
                             Already have an account?
                         </Text>
                         <TouchableOpacity
                             onPress={() => router.back()}
-                            className="px-8 py-3 rounded-full"
-                            style={{ backgroundColor: 'rgba(79,70,229,0.06)' }}
+                            style={{ paddingHorizontal: 32, paddingVertical: 12, borderRadius: 9999, backgroundColor: 'rgba(79,70,229,0.06)' }}
                         >
                             <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 14, color: '#4F46E5' }}>
                                 Sign In

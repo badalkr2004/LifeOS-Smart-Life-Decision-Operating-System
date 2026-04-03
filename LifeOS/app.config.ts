@@ -10,7 +10,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   userInterfaceStyle: "automatic", // Supports light/dark as per design spec
   newArchEnabled: false, // Set to true only with custom dev client (npx expo run:android)
   splash: {
-    image: "./assets/splash.png",
+    image: "./assets/splash-icon.png",
     resizeMode: "contain",
     backgroundColor: "#F9FAFB",
   },
