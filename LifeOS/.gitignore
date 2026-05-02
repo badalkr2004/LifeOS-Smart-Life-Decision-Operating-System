@@ -42,3 +42,4 @@ yarn-error.*
 
 # AI context file
 context.md
+.env

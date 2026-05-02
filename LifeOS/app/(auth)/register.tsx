@@ -313,7 +313,7 @@ export default function RegisterScreen() {
                     {step === 1 && (
                         <SurfaceCard>
                             {/* First + Last Name row */}
-                            <View style={{ flexDirection: 'row', gap: 12, marginBottom: 20 }}>
+                            <View style={{ flexDirection: 'column', gap: 12, marginBottom: 20 }}>
                                 <InputField
                                     label="First"
                                     placeholder="Jane"
