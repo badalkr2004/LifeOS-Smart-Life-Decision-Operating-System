@@ -140,6 +140,10 @@ export default function DecisionDetailScreen() {
                         <Ionicons name="checkbox-outline" size={18} color="#10B981" />
                         <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 14, color: '#111827' }}>Record Check-in</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity onPress={() => { setShowMenu(false); handleAnalyzeAI(); }} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, padding: 12, borderRadius: 10 }}>
+                        <Ionicons name="sparkles-outline" size={18} color="#7C3AED" />
+                        <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 14, color: '#111827' }}>Analyze with AI</Text>
+                    </TouchableOpacity>
                     {decision.status === 'active' ? (
                         <TouchableOpacity onPress={() => handleStatusChange('archived')} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, padding: 12, borderRadius: 10 }}>
                             <Ionicons name="archive-outline" size={18} color="#F59E0B" />
