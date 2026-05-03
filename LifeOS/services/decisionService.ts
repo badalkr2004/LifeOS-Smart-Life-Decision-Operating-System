@@ -131,6 +131,21 @@ export type Template = {
   createdAt: string;
 };
 
+export type OutcomeCreatePayload = {
+  decisionId: string;
+  satisfactionScore: number;
+  actualResults: string;
+  reflections?: string;
+  surprises?: string;
+  lessonsLearned?: string;
+  wouldDecideAgain?: boolean;
+  moodAtCheckIn?: number;
+  stressLevel?: number;
+  metrics?: { metric: string; value: number; unit?: string; vsExpected?: string }[];
+  unintendedConsequences?: { description: string; impact: string; severity: number }[];
+  contextChanges?: string;
+};
+
 // ─── API Functions ────────────────────────────────────────────────────────────
 
 export const decisionService = {
@@ -189,9 +204,37 @@ export const decisionService = {
     return data.data;
   },
 
+  /** POST /api/v1/outcomes — Create an outcome check-in */
+  createOutcome: async (payload: OutcomeCreatePayload): Promise<Outcome> => {
+    const { data } = await apiClient.post<{ data: Outcome }>("/outcomes", payload);
+    return data.data;
+  },
+
+  /** POST /api/v1/outcomes/schedule-checkin — Schedule a check-in reminder */
+  scheduleCheckin: async (payload: {
+    decisionId: string;
+    scheduledDate: string;
+    reminderType?: string;
+    customMessage?: string;
+  }): Promise<any> => {
+    const { data } = await apiClient.post("/outcomes/schedule-checkin", payload);
+    return data;
+  },
+
+  /** POST /api/v1/outcomes/checkins/:id/complete — Mark check-in as completed */
+  completeCheckin: async (id: string): Promise<void> => {
+    await apiClient.post(`/outcomes/checkins/${id}/complete`);
+  },
+
+  /** POST /api/v1/outcomes/checkins/:id/skip — Skip a check-in */
+  skipCheckin: async (id: string): Promise<void> => {
+    await apiClient.post(`/outcomes/checkins/${id}/skip`);
+  },
+
   /** GET /api/v1/templates — All templates */
   getTemplates: async (): Promise<Template[]> => {
     const { data } = await apiClient.get<{ data: Template[] }>("/templates");
     return data.data;
   },
 };
+

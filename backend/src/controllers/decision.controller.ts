@@ -1,7 +1,7 @@
 import { type Response } from "express";
 import { type AuthRequest } from "../middleware/auth.middleware";
 import { db } from "../db/connection";
-import { decisions } from "../db/schema";
+import { decisions, outcomeReminders } from "../db/schema";
 import { eq, and, sql, desc, asc, isNull } from "drizzle-orm";
 
 // ─── List Decisions (with filtering & pagination) ───────────────────────────
@@ -140,7 +140,65 @@ export const createDecision = async (req: AuthRequest, res: Response): Promise<v
             })
             .returning();
 
-        res.status(201).json({ data: newDecision[0] });
+        const created = newDecision[0]!;
+
+        // ── Auto-schedule check-in reminders ──
+        // Default intervals: 1 week, 1 month, 3 months from the decision date
+        const decisionDate = new Date(created.decisionDate);
+        const defaultIntervals: Array<{ type: string; days: number; label: string }> = [
+            { type: "1_week", days: 7, label: "1-week check-in" },
+            { type: "1_month", days: 30, label: "1-month check-in" },
+            { type: "3_months", days: 90, label: "3-month check-in" },
+        ];
+
+        const reminderValues = defaultIntervals.map((interval) => {
+            const scheduledDate = new Date(decisionDate);
+            scheduledDate.setDate(scheduledDate.getDate() + interval.days);
+            return {
+                userId,
+                decisionId: created.id,
+                reminderType: interval.type as any,
+                scheduledDate,
+                status: "pending" as const,
+                customMessage: `${interval.label} for "${created.title}"`,
+            };
+        });
+
+        // If expectedOutcomeDate exists, also schedule a reminder for that date
+        if (created.expectedOutcomeDate) {
+            reminderValues.push({
+                userId,
+                decisionId: created.id,
+                reminderType: "custom" as any,
+                scheduledDate: new Date(created.expectedOutcomeDate),
+                status: "pending" as const,
+                customMessage: `Expected outcome date for "${created.title}"`,
+            });
+        }
+
+        // Filter out any reminders scheduled in the past
+        const now = new Date();
+        const futureReminders = reminderValues.filter((r) => r.scheduledDate > now);
+
+        if (futureReminders.length > 0) {
+            await db.insert(outcomeReminders).values(futureReminders);
+        }
+
+        // If ALL reminders are in the past (backdated decision), schedule one for tomorrow
+        if (futureReminders.length === 0) {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            await db.insert(outcomeReminders).values({
+                userId,
+                decisionId: created.id,
+                reminderType: "custom" as any,
+                scheduledDate: tomorrow,
+                status: "pending" as const,
+                customMessage: `Check-in overdue for "${created.title}"`,
+            });
+        }
+
+        res.status(201).json({ data: created });
     } catch (error) {
         console.error("createDecision error:", error);
         res.status(500).json({ error: "Internal server error" });

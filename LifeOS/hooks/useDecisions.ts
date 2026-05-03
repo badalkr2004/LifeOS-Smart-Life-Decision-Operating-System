@@ -4,7 +4,9 @@ import {
   type DecisionListParams,
   type DecisionCreatePayload,
   type DecisionUpdatePayload,
+  type OutcomeCreatePayload,
 } from "@/services/decisionService";
+import { dashboardKeys } from "@/hooks/useDashboard";
 
 // ─── Query Keys ───────────────────────────────────────────────────────────────
 
@@ -27,7 +29,7 @@ export function useDecisions(params?: DecisionListParams) {
     queryKey: decisionKeys.list(params),
     queryFn: () => decisionService.getDecisions(params),
     staleTime: 1000 * 60 * 2,
-    placeholderData: (prev) => prev, // keep previous data while fetching next page
+    placeholderData: (prev) => prev,
   });
 }
 
@@ -56,7 +58,7 @@ export function useTemplates() {
   return useQuery({
     queryKey: decisionKeys.templates,
     queryFn: decisionService.getTemplates,
-    staleTime: 1000 * 60 * 30, // templates rarely change
+    staleTime: 1000 * 60 * 30,
   });
 }
 
@@ -70,7 +72,6 @@ export function useCreateDecision() {
       decisionService.createDecision(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: decisionKeys.lists() });
-      // also invalidate dashboard recent decisions
       queryClient.invalidateQueries({ queryKey: ["decisions", "recent"] });
     },
   });
@@ -105,6 +106,43 @@ export function useDeleteDecision() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: decisionKeys.lists() });
       queryClient.invalidateQueries({ queryKey: ["decisions", "recent"] });
+    },
+  });
+}
+
+/** Create an outcome check-in for a decision */
+export function useCreateOutcome() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: OutcomeCreatePayload) =>
+      decisionService.createOutcome(payload),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: decisionKeys.outcomes(variables.decisionId),
+      });
+      queryClient.invalidateQueries({ queryKey: dashboardKeys.pendingCheckins });
+    },
+  });
+}
+
+/** Complete a pending check-in reminder */
+export function useCompleteCheckin() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => decisionService.completeCheckin(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: dashboardKeys.pendingCheckins });
+    },
+  });
+}
+
+/** Skip a pending check-in reminder */
+export function useSkipCheckin() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => decisionService.skipCheckin(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: dashboardKeys.pendingCheckins });
     },
   });
 }

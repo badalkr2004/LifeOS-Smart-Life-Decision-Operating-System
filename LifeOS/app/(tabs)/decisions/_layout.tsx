@@ -12,6 +12,13 @@ export default function DecisionsLayout() {
                 }}
             />
             <Stack.Screen
+                name="checkin"
+                options={{
+                    presentation: 'modal',
+                    animation: 'slide_from_bottom',
+                }}
+            />
+            <Stack.Screen
                 name="[id]"
                 options={{
                     animation: 'slide_from_right',
@@ -20,3 +27,4 @@ export default function DecisionsLayout() {
         </Stack>
     );
 }
+

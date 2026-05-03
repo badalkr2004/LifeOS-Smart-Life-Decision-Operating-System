@@ -1,4 +1,4 @@
-import { Tabs } from 'expo-router';
+import { Tabs, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
 /**
@@ -6,6 +6,8 @@ import { Ionicons } from '@expo/vector-icons';
  * Screens are lazy-loaded by Expo Router from the (tabs)/ folder.
  */
 export default function TabsLayout() {
+    const router = useRouter();
+
     return (
         <Tabs
             screenOptions={{
@@ -43,6 +45,12 @@ export default function TabsLayout() {
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="scale-outline" size={size} color={color} />
                     ),
+                }}
+                listeners={{
+                    tabPress: (e) => {
+                        // Reset the decisions stack back to the list on tab re-press
+                        router.navigate('/(tabs)/decisions');
+                    },
                 }}
             />
             <Tabs.Screen

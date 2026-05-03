@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { authenticate } from "../middleware/auth.middleware";
 import {
+    preDecisionAnalysis,
     analyzeDecision,
     recommendApproach,
     similarDecisions,
@@ -13,6 +14,7 @@ const router = Router();
 
 router.use(authenticate);
 
+router.post("/pre-decision-analysis", preDecisionAnalysis);
 router.post("/analyze-decision", analyzeDecision);
 router.post("/recommend-approach", recommendApproach);
 router.get("/similar-decisions", similarDecisions);
