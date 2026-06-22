@@ -7,7 +7,7 @@ set -euo pipefail
 : "${DATABASE_URL:?DATABASE_URL is required}"
 : "${JWT_SECRET:?JWT_SECRET is required}"
 : "${CORS_ALLOW_ORIGIN:=*}"
-: "${RESERVED_CONCURRENCY:=2}"
+: "${RESERVED_CONCURRENCY:=}"
 
 ROLE_NAME="${FUNCTION_NAME}-lambda-role"
 POLICY_ARN="arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
@@ -98,11 +98,16 @@ aws lambda wait function-active \
   --function-name "$FUNCTION_NAME" \
   --region "$AWS_REGION"
 
-aws lambda put-function-concurrency \
-  --function-name "$FUNCTION_NAME" \
-  --reserved-concurrent-executions "$RESERVED_CONCURRENCY" \
-  --region "$AWS_REGION" >/dev/null
-
+if [ -n "$RESERVED_CONCURRENCY" ]; then
+  aws lambda put-function-concurrency \
+    --function-name "$FUNCTION_NAME" \
+    --reserved-concurrent-executions "$RESERVED_CONCURRENCY" \
+    --region "$AWS_REGION" >/dev/null
+else
+  aws lambda delete-function-concurrency \
+    --function-name "$FUNCTION_NAME" \
+    --region "$AWS_REGION" >/dev/null 2>&1 || true
+fi
 if aws lambda get-function-url-config --function-name "$FUNCTION_NAME" --region "$AWS_REGION" >/dev/null 2>&1; then
   aws lambda update-function-url-config \
     --function-name "$FUNCTION_NAME" \

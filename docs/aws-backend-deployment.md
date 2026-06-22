@@ -47,7 +47,7 @@ Stop and verify: you should see a monthly budget listed in AWS Budgets.
 
 ### 1.3 Keep Concurrency Low
 
-The workflow defaults `RESERVED_CONCURRENCY` to `2`. This caps the Lambda function at two concurrent executions, which is useful for a POC and helps avoid sudden runaway usage.
+The workflow leaves `RESERVED_CONCURRENCY` blank by default because some AWS accounts cannot reserve concurrency without dropping below the required unreserved minimum. For a POC, keep it blank unless you know your Lambda quota has enough room. If you later want a cap, set `RESERVED_CONCURRENCY=2` as a GitHub variable and rerun the workflow.
 
 ## 2. Prepare The Database
 
@@ -178,7 +178,7 @@ Recommended variables:
 AWS_REGION=ap-south-1
 BACKEND_FUNCTION_NAME=lifeos-backend-poc
 CORS_ALLOW_ORIGIN=*
-RESERVED_CONCURRENCY=2
+# RESERVED_CONCURRENCY=2  # optional; leave unset by default
 ```
 
 For mobile app testing, `CORS_ALLOW_ORIGIN=*` is acceptable for a POC. For production, restrict it.

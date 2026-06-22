@@ -51,6 +51,6 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           CORS_ALLOW_ORIGIN: ${{ vars.CORS_ALLOW_ORIGIN || '*' }}
-          RESERVED_CONCURRENCY: ${{ vars.RESERVED_CONCURRENCY || '2' }}
+          RESERVED_CONCURRENCY: ${{ vars.RESERVED_CONCURRENCY || '' }}
         run: bash infra/aws/deploy-lambda-url.sh
 
