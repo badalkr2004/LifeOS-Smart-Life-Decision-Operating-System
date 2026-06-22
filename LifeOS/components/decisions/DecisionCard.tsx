@@ -1,8 +1,6 @@
 /**
  * DecisionCard — Card component used in the decision list.
- *
- * Displays: category icon, title, description, confidence ring,
- * category badge, status badge, and time ago.
+ * Features a left accent bar, category icon, confidence indicator, and status badge.
  */
 
 import React from 'react';
@@ -12,11 +10,12 @@ import type { Decision } from '@/services/decisionService';
 import {
     getCategoryIcon,
     getCategoryColor,
-    getStatusLabel,
+    getCategoryBg,
     getStatusColor,
     getConfidenceColor,
     timeAgo,
 } from '@/utils/helpers';
+import { COLORS, SPACING, RADII, SHADOWS, TYPOGRAPHY } from '@/utils/designTokens';
 
 type DecisionCardProps = {
     decision: Decision;
@@ -25,6 +24,7 @@ type DecisionCardProps = {
 
 export const DecisionCard: React.FC<DecisionCardProps> = ({ decision, onPress }) => {
     const catColor = getCategoryColor(decision.category);
+    const catBg = getCategoryBg(decision.category);
     const statusColor = getStatusColor(decision.status);
     const confColor = getConfidenceColor(decision.confidenceLevel);
 
@@ -33,149 +33,60 @@ export const DecisionCard: React.FC<DecisionCardProps> = ({ decision, onPress })
             onPress={onPress}
             activeOpacity={0.7}
             style={{
-                backgroundColor: '#FFFFFF',
-                borderRadius: 20,
-                padding: 20,
-                marginBottom: 12,
-                marginHorizontal: 20,
-                shadowColor: 'rgba(25,28,29,0.8)',
-                shadowOffset: { width: 0, height: 4 },
-                shadowOpacity: 0.04,
-                shadowRadius: 16,
-                elevation: 2,
+                backgroundColor: COLORS.surfaceLowest,
+                borderRadius: RADII.xl,
+                marginBottom: SPACING.md,
+                marginHorizontal: SPACING.xl,
+                ...SHADOWS.card,
+                overflow: 'hidden',
             }}
         >
-            {/* Top row: icon + title + confidence */}
-            <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 12, marginBottom: 10 }}>
-                <View
-                    style={{
-                        width: 42,
-                        height: 42,
-                        borderRadius: 13,
-                        backgroundColor: catColor + '14',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                >
-                    <Ionicons name={getCategoryIcon(decision.category)} size={20} color={catColor} />
-                </View>
-                <View style={{ flex: 1 }}>
-                    <Text
-                        style={{
-                            fontFamily: 'Inter_700Bold',
-                            fontSize: 16,
-                            color: '#111827',
-                            lineHeight: 22,
-                            letterSpacing: -0.3,
-                        }}
-                        numberOfLines={2}
-                    >
-                        {decision.title}
-                    </Text>
-                    {decision.description ? (
-                        <Text
-                            style={{
-                                fontFamily: 'Inter_400Regular',
-                                fontSize: 13,
-                                color: '#6B7280',
-                                marginTop: 4,
-                                lineHeight: 18,
-                            }}
-                            numberOfLines={2}
-                        >
-                            {decision.description}
-                        </Text>
-                    ) : null}
-                </View>
-                {/* Confidence indicator */}
-                <View
-                    style={{
-                        width: 32,
-                        height: 32,
-                        borderRadius: 16,
-                        borderWidth: 2.5,
-                        borderColor: confColor,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginTop: 2,
-                    }}
-                >
-                    <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 11, color: confColor }}>
-                        {decision.confidenceLevel}
-                    </Text>
-                </View>
-            </View>
+            {/* Left accent bar */}
+            <View style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 4, backgroundColor: catColor, borderTopLeftRadius: RADII.xl, borderBottomLeftRadius: RADII.xl }} />
 
-            {/* Bottom row: badges + time */}
-            <View
-                style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginTop: 4,
-                }}
-            >
-                <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
-                    {/* Category badge */}
-                    <View
-                        style={{
-                            backgroundColor: catColor + '14',
-                            borderRadius: 8,
-                            paddingHorizontal: 10,
-                            paddingVertical: 4,
-                        }}
-                    >
-                        <Text
-                            style={{
-                                fontFamily: 'Inter_600SemiBold',
-                                fontSize: 11,
-                                color: catColor,
-                                textTransform: 'capitalize',
-                            }}
-                        >
-                            {decision.category}
-                        </Text>
+            <View style={{ padding: SPACING.xl, paddingLeft: SPACING.xl + 4 }}>
+                {/* Top: icon + title row */}
+                <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: SPACING.md, marginBottom: SPACING.md }}>
+                    <View style={{ width: 44, height: 44, borderRadius: 14, backgroundColor: catBg, alignItems: 'center', justifyContent: 'center' }}>
+                        <Ionicons name={getCategoryIcon(decision.category)} size={22} color={catColor} />
                     </View>
-                    {/* Status badge */}
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            gap: 4,
-                            backgroundColor: statusColor + '14',
-                            borderRadius: 8,
-                            paddingHorizontal: 10,
-                            paddingVertical: 4,
-                        }}
-                    >
-                        <View
-                            style={{
-                                width: 6,
-                                height: 6,
-                                borderRadius: 3,
-                                backgroundColor: statusColor,
-                            }}
-                        />
-                        <Text
-                            style={{
-                                fontFamily: 'Inter_600SemiBold',
-                                fontSize: 11,
-                                color: statusColor,
-                            }}
-                        >
-                            {getStatusLabel(decision.status)}
+                    <View style={{ flex: 1, marginRight: SPACING.sm }}>
+                        <Text style={[TYPOGRAPHY.heading, { color: COLORS.textPrimary }]} numberOfLines={2}>
+                            {decision.title}
                         </Text>
+                        {decision.description ? (
+                            <Text style={[TYPOGRAPHY.body, { color: COLORS.textSecondary, marginTop: 4 }]} numberOfLines={2}>
+                                {decision.description}
+                            </Text>
+                        ) : null}
+                    </View>
+                    {/* Confidence ring */}
+                    <View style={{ alignItems: 'center', marginTop: 2 }}>
+                        <View style={{ width: 34, height: 34, borderRadius: 17, borderWidth: 2.5, borderColor: confColor, alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.surfaceLowest }}>
+                            <Text style={{ fontFamily: 'Inter_800ExtraBold', fontSize: 12, color: confColor }}>
+                                {decision.confidenceLevel}
+                            </Text>
+                        </View>
                     </View>
                 </View>
-                <Text
-                    style={{
-                        fontFamily: 'Inter_400Regular',
-                        fontSize: 12,
-                        color: '#9CA3AF',
-                    }}
-                >
-                    {timeAgo(decision.updatedAt)}
-                </Text>
+
+                {/* Bottom: badges + time */}
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <View style={{ flexDirection: 'row', gap: SPACING.sm, alignItems: 'center' }}>
+                        <View style={{ backgroundColor: catBg, borderRadius: RADII.sm, paddingHorizontal: 10, paddingVertical: 4 }}>
+                            <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 11, color: catColor, textTransform: 'capitalize' }}>
+                                {decision.category.replace(/_/g, ' ')}
+                            </Text>
+                        </View>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: statusColor + '14', borderRadius: RADII.sm, paddingHorizontal: 10, paddingVertical: 4 }}>
+                            <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: statusColor }} />
+                            <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 11, color: statusColor }}>{decision.status}</Text>
+                        </View>
+                    </View>
+                    <Text style={[TYPOGRAPHY.bodySmall, { color: '#9CA3AF' }]}>
+                        {timeAgo(decision.updatedAt)}
+                    </Text>
+                </View>
             </View>
         </TouchableOpacity>
     );

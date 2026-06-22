@@ -281,9 +281,9 @@ export default function CheckinScreen() {
                                     key={v}
                                     onPress={() => setStress(v)}
                                     style={{
-                                        width: 28,
-                                        height: 28,
-                                        borderRadius: 14,
+                                        width: 44,
+                                        height: 44,
+                                        borderRadius: 22,
                                         backgroundColor: v <= stress
                                             ? (stress <= 3 ? '#10B981' : stress <= 6 ? '#F59E0B' : '#EF4444')
                                             : '#F3F4F6',
@@ -291,7 +291,7 @@ export default function CheckinScreen() {
                                         justifyContent: 'center',
                                     }}
                                 >
-                                    <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 11, color: v <= stress ? '#FFFFFF' : '#9CA3AF' }}>{v}</Text>
+                                    <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 13, color: v <= stress ? '#FFFFFF' : '#9CA3AF' }}>{v}</Text>
                                 </TouchableOpacity>
                             ))}
                         </View>

@@ -68,9 +68,9 @@ export const profileService = {
     return data.user;
   },
 
-  /** PUT /api/v1/users/me (update basic user info) */
+  /** PATCH /api/v1/users/me (update basic user info) */
   updateMe: async (payload: UpdateUserPayload): Promise<User> => {
-    const { data } = await apiClient.put<{ user: User }>("/users/me", payload);
+    const { data } = await apiClient.patch<{ user: User }>("/users/me", payload);
     return data.user;
   },
 

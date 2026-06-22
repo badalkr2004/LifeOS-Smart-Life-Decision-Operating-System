@@ -3,6 +3,8 @@ import { type AuthRequest } from "../middleware/auth.middleware";
 import { db } from "../db/connection";
 import { decisions, outcomeReminders } from "../db/schema";
 import { eq, and, sql, desc, asc, isNull } from "drizzle-orm";
+import { generateDecisionEmbedding } from "../ai/pipeline";
+import { computeUserProfile } from "../ai/profileService";
 
 // ─── List Decisions (with filtering & pagination) ───────────────────────────
 export const listDecisions = async (req: AuthRequest, res: Response): Promise<void> => {
@@ -199,6 +201,14 @@ export const createDecision = async (req: AuthRequest, res: Response): Promise<v
         }
 
         res.status(201).json({ data: created });
+
+        // ── Async: Generate embedding + recompute profile (fire-and-forget) ──
+        generateDecisionEmbedding(created.id).catch((err) =>
+            console.error("[CreateDecision] Embedding generation failed:", err),
+        );
+        computeUserProfile(userId).catch((err) =>
+            console.error("[CreateDecision] Profile recomputation failed:", err),
+        );
     } catch (error) {
         console.error("createDecision error:", error);
         res.status(500).json({ error: "Internal server error" });

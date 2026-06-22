@@ -8,7 +8,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   orientation: "portrait",
   icon: "./assets/icon.png",
   userInterfaceStyle: "automatic", // Supports light/dark as per design spec
-  newArchEnabled: false, // Set to true only with custom dev client (npx expo run:android)
+  // @ts-ignore - newArchEnabled is valid for Expo SDK 55
+  newArchEnabled: false,
   splash: {
     image: "./assets/splash-icon.png",
     resizeMode: "contain",

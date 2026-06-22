@@ -11,5 +11,6 @@ export * from "./outcome.schema";
 export * from "./ai.schema";
 export * from "./notification.schema";
 export * from "./analytics.schema";
+export * from "./intelligence.schema";
 export * from "./social.schema";
 export * from "./relations";
