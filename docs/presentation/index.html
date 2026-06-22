@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LifeOS — BCA Final Year Project</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="deck">
+
+<!-- SLIDE 1: Title -->
+<div class="slide center active" style="padding:30px 60px">
+<div class="glow glow-1"></div><div class="glow glow-2"></div>
+<div class="tagline anim" style="font-size:14px;letter-spacing:4px">Presentation on</div>
+<h1 class="anim anim-d1" style="font-size:56px;margin-top:4px">Life<span style="color:var(--accent-light)">OS</span></h1>
+<p class="anim anim-d2" style="font-size:16px;color:var(--text-muted);margin-top:2px;font-weight:500">Smart Life Decision Operating System</p>
+<p class="anim anim-d2" style="font-size:13px;color:var(--text-muted);margin-top:1px">Final Year Project</p>
+<img src="logo.webp" alt="LifeOS Logo" class="anim anim-d2" style="width:100px;height:100px;margin-top:16px;border-radius:16px;object-fit:cover">
+<div class="anim anim-d3" style="margin-top:12px;padding:18px 40px;border:1px solid var(--border);border-radius:16px;background:var(--card)">
+<p style="font-size:11px;color:var(--accent-light);letter-spacing:2px;text-transform:uppercase;font-weight:600">Presented by</p>
+<p style="font-size:22px;font-weight:800;margin-top:4px;letter-spacing:-0.5px">Badal Kumar</p>
+<p style="font-size:12px;color:var(--text-muted);margin-top:2px">Roll No: 10 · Session: 2023–26</p>
+<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);display:flex;gap:24px;justify-content:center">
+<p style="font-size:11px;color:var(--text-muted)">Coordinator & HOD: <strong style="color:var(--text)">Dr. Dinesh Manjhi</strong></p>
+<p style="font-size:11px;color:var(--text-muted)">Guided by: <strong style="color:var(--text)">Ajit Sir</strong></p>
+</div>
+</div>
+<p class="anim anim-d4" style="font-size:12px;color:var(--text-muted);margin-top:14px">Department of Computer Application</p>
+<p class="anim anim-d5" style="font-size:15px;font-weight:800;color:var(--text);margin-top:2px;letter-spacing:-0.3px">Patna College, Patna</p>
+</div>
+
+<!-- SLIDE 2: Problem -->
+<div class="slide center">
+<div class="tagline anim">The Problem</div>
+<div class="big-quote anim anim-d1">"We make <em>35,000 decisions</em> a day — but how many do we <em>learn from</em>?"</div>
+<div class="content cols cols-3 mt-lg anim anim-d2" style="max-width:900px">
+<div class="card"><h3>❌ No Structure</h3><p>Decisions made without documentation or context</p></div>
+<div class="card"><h3>❌ No Feedback</h3><p>No system to track what actually happened</p></div>
+<div class="card"><h3>❌ No Learning</h3><p>Same mistakes repeated because patterns are invisible</p></div>
+</div>
+</div>
+
+<!-- SLIDE 3: Solution -->
+<div class="slide center">
+<div class="tagline anim">The Solution</div>
+<h2 class="anim anim-d1">An operating system for your <span style="color:var(--accent-light)">life decisions</span></h2>
+<div class="content cols cols-2 mt-md anim anim-d2" style="max-width:800px">
+<div class="card card-accent"><h3>📝 Log</h3><p>Decisions with context, alternatives & expected outcomes</p></div>
+<div class="card card-accent"><h3>📊 Track</h3><p>Schedule check-ins to record actual results over time</p></div>
+<div class="card card-accent"><h3>🧠 Advise</h3><p>AI advisor that knows your personal decision history</p></div>
+<div class="card card-accent"><h3>🔍 Discover</h3><p>Auto-detect behavioral patterns and blind spots</p></div>
+</div>
+<p class="anim anim-d3 mt-md" style="font-style:italic;color:var(--accent-light)">"Decide better. Learn faster. Live intentionally."</p>
+</div>
+
+<!-- SLIDE 4: Features -->
+<div class="slide left">
+<div class="content">
+<div class="tagline anim">Core Features</div>
+<h2 class="anim anim-d1">What LifeOS Does</h2>
+<div class="cols cols-2 mt-md anim anim-d2" style="max-width:1000px">
+<div class="card"><h3>📓 Decision Journal</h3><p>Structured logging with categories, alternatives, confidence levels, and expected metrics</p></div>
+<div class="card"><h3>🔔 Outcome Tracking</h3><p>Scheduled check-ins to measure satisfaction, record reflections, and track lessons learned</p></div>
+<div class="card"><h3>💬 AI Advisor</h3><p>Conversational AI with SSE streaming that knows your full decision history</p></div>
+<div class="card"><h3>🔬 Pattern Detection</h3><p>Auto-discovers timing effects, overconfidence bias, and category-specific tendencies</p></div>
+<div class="card"><h3>📈 Analytics</h3><p>Visualize decision quality, satisfaction trends, and category breakdowns over time</p></div>
+<div class="card"><h3>🧠 Memory System</h3><p>AI extracts key facts from your reflections for personalized long-term guidance</p></div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 5: Target Users -->
+<div class="slide center">
+<div class="tagline anim">Target Users</div>
+<h2 class="anim anim-d1">Who Is This For?</h2>
+<div class="content cols cols-4 mt-md anim anim-d2" style="max-width:1000px">
+<div class="card" style="text-align:center"><div style="font-size:36px;margin-bottom:12px">🎓</div><h3>Students</h3><p>Career paths, internships, course selection</p></div>
+<div class="card" style="text-align:center"><div style="font-size:36px;margin-bottom:12px">💼</div><h3>Professionals</h3><p>Job offers, salary, project prioritization</p></div>
+<div class="card" style="text-align:center"><div style="font-size:36px;margin-bottom:12px">🚀</div><h3>Entrepreneurs</h3><p>Strategy, investments, partnerships</p></div>
+<div class="card" style="text-align:center"><div style="font-size:36px;margin-bottom:12px">🏠</div><h3>Everyone</h3><p>Health, purchases, relationships, lifestyle</p></div>
+</div>
+</div>
+
+<!-- SLIDE 6: Architecture & Stack (Combined) -->
+<div class="slide left">
+<div class="content">
+<div class="tagline anim">Architecture</div>
+<h2 class="anim anim-d1">System Architecture & Technology</h2>
+<div class="anim anim-d2 mt-md" style="display:flex;gap:20px;max-width:1000px">
+<!-- Left: Architecture Flow -->
+<div style="flex:1;display:flex;flex-direction:column;gap:4px">
+<div class="card card-accent" style="padding:16px 20px;display:flex;align-items:center;gap:14px">
+<div style="font-size:24px">📱</div>
+<div style="flex:1"><div style="font-weight:700;font-size:14px">Mobile App</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">React Native · Expo SDK 55 · TypeScript</div></div>
+<div style="display:flex;gap:4px;flex-wrap:wrap"><span class="badge badge-lavender" style="font-size:9px">Expo Router</span><span class="badge badge-lavender" style="font-size:9px">Zustand</span><span class="badge badge-lavender" style="font-size:9px">React Query</span></div>
+</div>
+<div style="text-align:center;color:var(--accent);font-size:11px;font-weight:600;padding:2px 0">↓ HTTPS + JWT Bearer Token</div>
+<div class="card card-accent" style="padding:16px 20px;display:flex;align-items:center;gap:14px">
+<div style="font-size:24px">🖥</div>
+<div style="flex:1"><div style="font-weight:700;font-size:14px">Backend API</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Node.js (Bun) · Express v5 · TypeScript</div></div>
+<div style="display:flex;gap:4px;flex-wrap:wrap"><span class="badge badge-lavender" style="font-size:9px">JWT Auth</span><span class="badge badge-lavender" style="font-size:9px">Helmet</span><span class="badge badge-lavender" style="font-size:9px">40+ APIs</span></div>
+</div>
+<div style="text-align:center;color:var(--accent);font-size:11px;font-weight:600;padding:2px 0">↓ Drizzle ORM (Type-safe queries)</div>
+<div class="card card-accent" style="padding:16px 20px;display:flex;align-items:center;gap:14px">
+<div style="font-size:24px">🗄</div>
+<div style="flex:1"><div style="font-weight:700;font-size:14px">Database</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">PostgreSQL + pgvector · 20+ tables</div></div>
+<div style="display:flex;gap:4px;flex-wrap:wrap"><span class="badge badge-lavender" style="font-size:9px">Drizzle ORM</span><span class="badge badge-lavender" style="font-size:9px">Vector 1536d</span></div>
+</div>
+<div style="text-align:center;color:var(--accent);font-size:11px;font-weight:600;padding:2px 0">↕ Async Fire-and-Forget</div>
+<div class="card card-accent" style="padding:16px 20px;display:flex;align-items:center;gap:14px">
+<div style="font-size:24px">🧠</div>
+<div style="flex:1"><div style="font-weight:700;font-size:14px">AI Intelligence Engine</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">OpenAI GPT-4o · Vercel AI SDK</div></div>
+<div style="display:flex;gap:4px;flex-wrap:wrap"><span class="badge badge-lavender" style="font-size:9px">4-Layer Pipeline</span><span class="badge badge-lavender" style="font-size:9px">SSE Stream</span></div>
+</div>
+</div>
+<!-- Right: Key Highlights -->
+<div style="flex:0 0 240px;display:flex;flex-direction:column;gap:10px">
+<div class="card" style="padding:14px 18px"><h3 style="font-size:11px">🔐 Auth Flow</h3><p style="font-size:11px">bcrypt → JWT (15min) + Refresh (7d) → SecureStore → Auto-refresh interceptor</p></div>
+<div class="card" style="padding:14px 18px"><h3 style="font-size:11px">📡 Real-time AI</h3><p style="font-size:11px">Server-Sent Events stream tokens to the client in real-time</p></div>
+<div class="card" style="padding:14px 18px"><h3 style="font-size:11px">🔍 Semantic Search</h3><p style="font-size:11px">pgvector cosine similarity finds related past decisions</p></div>
+<div class="card" style="padding:14px 18px"><h3 style="font-size:11px">⚡ Background Jobs</h3><p style="font-size:11px">Profile refresh (6h) · Pattern detection (12h) · Memory cleanup (24h)</p></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 8: Database -->
+<div class="slide left">
+<div class="content">
+<div class="tagline anim">Data Layer</div>
+<h2 class="anim anim-d1">Database Design</h2>
+<p class="anim anim-d1" style="margin-bottom:20px">20+ tables across 10 schema modules — all type-safe via Drizzle ORM</p>
+<div class="anim anim-d2" style="overflow:auto;max-height:55vh">
+<table>
+<tr><th>Module</th><th>Key Tables</th><th>Purpose</th></tr>
+<tr><td>Users</td><td>users, user_profiles</td><td>Auth, preferences, settings</td></tr>
+<tr><td>Auth</td><td>refresh_tokens</td><td>JWT token management</td></tr>
+<tr><td>Decisions</td><td>decisions, frameworks, templates</td><td>Core decision data + attachments</td></tr>
+<tr><td>Outcomes</td><td>outcomes, outcome_reminders</td><td>Result tracking over time</td></tr>
+<tr><td>AI</td><td>ai_chat_sessions, ai_chat_messages</td><td>Conversational AI history</td></tr>
+<tr><td>Intelligence</td><td>user_decision_profiles, decision_patterns, user_memories</td><td>AI-computed behavioral data</td></tr>
+<tr><td>Analytics</td><td>analytics_snapshots, user_insights</td><td>Periodic metrics + insights</td></tr>
+<tr><td>Notifications</td><td>notifications</td><td>User alerts & reminders</td></tr>
+</table>
+</div>
+<p class="anim anim-d3 mt-md" style="font-size:13px"><span class="badge badge-accent">pgvector</span> <span style="margin-left:8px">decisions.embedding — 1536-dim vectors for semantic similarity search</span></p>
+</div>
+</div>
+
+<!-- SLIDE: ER Diagram -->
+<div class="slide left">
+<div class="content">
+<div class="tagline anim">Data Model</div>
+<h2 class="anim anim-d1">Entity Relationship Diagram</h2>
+<div class="anim anim-d2 mt-md" style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center">
+<div style="display:flex;flex-direction:column;gap:8px;align-items:center">
+<div class="card" style="padding:14px 20px;min-width:180px;border-left:3px solid var(--accent)"><h3 style="font-size:13px;margin-bottom:6px">👤 users</h3><p style="font-size:11px;line-height:1.6">id (PK) · email · firstName<br>lastName · role · status<br>timezone · passwordHash</p></div>
+<div style="color:var(--accent);font-size:12px">1 ── 1</div>
+<div class="card" style="padding:14px 20px;min-width:180px;border-left:3px solid var(--accent)"><h3 style="font-size:13px;margin-bottom:6px">📋 user_profiles</h3><p style="font-size:11px;line-height:1.6">id (PK) · userId (FK)<br>bio · occupation · location<br>notificationPrefs</p></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;align-items:center">
+<div class="card card-accent" style="padding:14px 20px;min-width:200px;border-left:3px solid #6366F1"><h3 style="font-size:13px;margin-bottom:6px">📝 decisions</h3><p style="font-size:11px;line-height:1.6">id (PK) · userId (FK)<br>title · category · status<br>confidenceLevel · context<br>alternativesConsidered<br>embedding (vector 1536)</p></div>
+<div style="color:var(--accent);font-size:12px">1 ── N</div>
+<div class="card" style="padding:14px 20px;min-width:200px;border-left:3px solid var(--success)"><h3 style="font-size:13px;margin-bottom:6px">📊 outcomes</h3><p style="font-size:11px;line-height:1.6">id (PK) · decisionId (FK)<br>satisfactionScore · metrics<br>reflections · lessonsLearned<br>wouldDecideAgain</p></div>
+<div style="color:var(--accent);font-size:12px">1 ── N</div>
+<div class="card" style="padding:14px 20px;min-width:200px;border-left:3px solid var(--warning)"><h3 style="font-size:13px;margin-bottom:6px">🔔 outcome_reminders</h3><p style="font-size:11px;line-height:1.6">id (PK) · decisionId (FK)<br>scheduledDate · status<br>reminderType</p></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;align-items:center">
+<div class="card" style="padding:14px 20px;min-width:180px;border-left:3px solid #8B5CF6"><h3 style="font-size:13px;margin-bottom:6px">💬 ai_chat_sessions</h3><p style="font-size:11px;line-height:1.6">id (PK) · userId (FK)<br>title · context · status</p></div>
+<div style="color:var(--accent);font-size:12px">1 ── N</div>
+<div class="card" style="padding:14px 20px;min-width:180px;border-left:3px solid #8B5CF6"><h3 style="font-size:13px;margin-bottom:6px">💬 ai_chat_messages</h3><p style="font-size:11px;line-height:1.6">id (PK) · sessionId (FK)<br>role · content · metadata</p></div>
+<div style="color:var(--accent);font-size:12px">──</div>
+<div class="card" style="padding:14px 20px;min-width:180px;border-left:3px solid var(--danger)"><h3 style="font-size:13px;margin-bottom:6px">🧠 user_memories</h3><p style="font-size:11px;line-height:1.6">id (PK) · userId (FK)<br>fact · category · importance<br>source · expiresAt</p></div>
+</div>
+</div>
+<p class="anim anim-d3 mt-md" style="font-size:12px;text-align:center;color:var(--text-muted)">20+ tables across 10 schema modules · All type-safe via <strong>Drizzle ORM</strong> · <span class="badge badge-accent" style="font-size:10px">pgvector</span> for semantic similarity</p>
+</div>
+</div>
+
+<!-- SLIDE: DFD -->
+<div class="slide left">
+<div class="content">
+<div class="tagline anim">Data Flow</div>
+<h2 class="anim anim-d1">Data Flow Diagram (Level 1)</h2>
+<div class="anim anim-d2 mt-md" style="position:relative;max-width:950px;margin:0 auto">
+<div style="display:flex;align-items:flex-start;gap:24px;flex-wrap:wrap;justify-content:center">
+<div style="display:flex;flex-direction:column;align-items:center;gap:12px;flex:0 0 160px">
+<div style="width:120px;height:120px;border-radius:50%;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;flex-direction:column">
+<div style="font-size:28px">👤</div>
+<div style="font-size:12px;font-weight:700;color:var(--text);margin-top:4px">User</div>
+</div>
+<div style="font-size:10px;color:var(--text-muted);text-align:center">External Entity</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;flex:1;min-width:300px">
+<div style="display:flex;gap:10px">
+<div class="card card-accent" style="flex:1;padding:12px 16px;text-align:center;border-radius:50px"><h3 style="font-size:12px;margin:0">P1</h3><p style="font-size:11px;margin:2px 0 0">Auth & Session Mgmt</p></div>
+<div class="card card-accent" style="flex:1;padding:12px 16px;text-align:center;border-radius:50px"><h3 style="font-size:12px;margin:0">P2</h3><p style="font-size:11px;margin:2px 0 0">Decision Management</p></div>
+</div>
+<div style="display:flex;gap:10px">
+<div class="card card-accent" style="flex:1;padding:12px 16px;text-align:center;border-radius:50px"><h3 style="font-size:12px;margin:0">P3</h3><p style="font-size:11px;margin:2px 0 0">Outcome Tracking</p></div>
+<div class="card card-accent" style="flex:1;padding:12px 16px;text-align:center;border-radius:50px"><h3 style="font-size:12px;margin:0">P4</h3><p style="font-size:11px;margin:2px 0 0">AI Intelligence</p></div>
+</div>
+<div style="display:flex;gap:10px">
+<div class="card card-accent" style="flex:1;padding:12px 16px;text-align:center;border-radius:50px"><h3 style="font-size:12px;margin:0">P5</h3><p style="font-size:11px;margin:2px 0 0">Analytics Engine</p></div>
+<div class="card card-accent" style="flex:1;padding:12px 16px;text-align:center;border-radius:50px"><h3 style="font-size:12px;margin:0">P6</h3><p style="font-size:11px;margin:2px 0 0">Background Jobs</p></div>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;flex:0 0 170px">
+<div style="border-top:2px solid var(--success);border-bottom:2px solid var(--success);padding:8px 14px;text-align:center"><p style="font-size:11px;font-weight:700;color:var(--success)">D1</p><p style="font-size:10px;color:var(--text-muted)">Users & Profiles</p></div>
+<div style="border-top:2px solid var(--success);border-bottom:2px solid var(--success);padding:8px 14px;text-align:center"><p style="font-size:11px;font-weight:700;color:var(--success)">D2</p><p style="font-size:10px;color:var(--text-muted)">Decisions</p></div>
+<div style="border-top:2px solid var(--success);border-bottom:2px solid var(--success);padding:8px 14px;text-align:center"><p style="font-size:11px;font-weight:700;color:var(--success)">D3</p><p style="font-size:10px;color:var(--text-muted)">Outcomes & Reminders</p></div>
+<div style="border-top:2px solid var(--success);border-bottom:2px solid var(--success);padding:8px 14px;text-align:center"><p style="font-size:11px;font-weight:700;color:var(--success)">D4</p><p style="font-size:10px;color:var(--text-muted)">AI Sessions & Memories</p></div>
+<div style="border-top:2px solid var(--success);border-bottom:2px solid var(--success);padding:8px 14px;text-align:center"><p style="font-size:11px;font-weight:700;color:var(--success)">D5</p><p style="font-size:10px;color:var(--text-muted)">Analytics & Patterns</p></div>
+</div>
+</div>
+<div class="anim anim-d3" style="display:flex;gap:20px;justify-content:center;margin-top:20px;font-size:11px;color:var(--text-muted)">
+<span>⬤ <span style="color:var(--text)">External Entity</span> = Circle</span>
+<span>⬤ <span style="color:var(--accent-light)">Process</span> = Rounded Pill</span>
+<span>⬤ <span style="color:var(--success)">Data Store</span> = Open Rectangle</span>
+</div>
+<div class="anim anim-d4 mt-md" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+<span class="badge badge-lavender" style="font-size:10px">User → P1: credentials</span>
+<span class="badge badge-lavender" style="font-size:10px">User → P2: decision data</span>
+<span class="badge badge-lavender" style="font-size:10px">P2 → D2: store decision</span>
+<span class="badge badge-lavender" style="font-size:10px">P3 → P4: trigger AI analysis</span>
+<span class="badge badge-lavender" style="font-size:10px">P4 → D4: store memories</span>
+<span class="badge badge-lavender" style="font-size:10px">P6 → P5: scheduled analytics</span>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 9: AI Pipeline -->
+<div class="slide left">
+<div class="content">
+<div class="tagline anim">Intelligence</div>
+<h2 class="anim anim-d1">AI Context Pipeline</h2>
+<p class="anim anim-d1 mb-md">Every AI response is personalized through a 4-layer context assembly</p>
+<div class="pipeline anim anim-d2" style="max-width:700px">
+<div class="pipe-step"><div class="pipe-num">1</div><div><div class="pipe-label">User Profile <span class="badge badge-lavender" style="margin-left:8px">~150 tokens</span></div><div class="pipe-desc">Pre-computed longitudinal behavioral summary</div></div></div>
+<div class="pipe-arrow">↓</div>
+<div class="pipe-step"><div class="pipe-num">2</div><div><div class="pipe-label">Category Context <span class="badge badge-lavender" style="margin-left:8px">~100 tokens</span></div><div class="pipe-desc">Aggregated stats for the specific decision category</div></div></div>
+<div class="pipe-arrow">↓</div>
+<div class="pipe-step"><div class="pipe-num">3</div><div><div class="pipe-label">RAG — Similar Decisions <span class="badge badge-lavender" style="margin-left:8px">~500 tokens</span></div><div class="pipe-desc">Vector search finds semantically similar past decisions</div></div></div>
+<div class="pipe-arrow">↓</div>
+<div class="pipe-step"><div class="pipe-num">4</div><div><div class="pipe-label">Behavioral Patterns <span class="badge badge-lavender" style="margin-left:8px">~100 tokens</span></div><div class="pipe-desc">Auto-detected tendencies (timing, confidence calibration)</div></div></div>
+<div class="pipe-arrow">↓</div>
+<div class="pipe-step" style="border-color:rgba(79,70,229,0.3)"><div class="pipe-num" style="background:var(--accent-light)">+</div><div><div class="pipe-label">User Memories <span class="badge badge-lavender" style="margin-left:8px">~100 tokens</span></div><div class="pipe-desc">Facts extracted from past reflections & conversations</div></div></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 10: API -->
+<div class="slide left">
+<div class="content">
+<div class="tagline anim">Backend</div>
+<h2 class="anim anim-d1">API Design</h2>
+<div class="cols cols-2 gap-lg mt-md anim anim-d2">
+<div>
+<table>
+<tr><th>Module</th><th>Endpoints</th></tr>
+<tr><td>Auth</td><td>register, login, refresh, logout</td></tr>
+<tr><td>Users</td><td>getMe, updateMe, profile CRUD, delete</td></tr>
+<tr><td>Decisions</td><td>list, get, create, update, delete</td></tr>
+<tr><td>Outcomes</td><td>list, create, update, checkins (3)</td></tr>
+<tr><td>Analytics</td><td>summary, patterns, quality, insights</td></tr>
+<tr><td>AI</td><td>chat (SSE), sessions, analyze, patterns</td></tr>
+<tr><td>Frameworks</td><td>list, get, create, delete</td></tr>
+<tr><td>Templates</td><td>list, get, create, delete</td></tr>
+</table>
+</div>
+<div>
+<div class="card mb-md"><h3>Key Design Decisions</h3>
+<ul class="feature-list" style="margin-top:8px">
+<li><div class="icon">🔐</div><div><strong>JWT Auth</strong> — Bearer tokens on all routes</div></li>
+<li><div class="icon">📄</div><div><strong>Pagination</strong> — All list endpoints</div></li>
+<li><div class="icon">📡</div><div><strong>SSE Streaming</strong> — Real-time AI chat</div></li>
+<li><div class="icon">🔥</div><div><strong>Fire & Forget</strong> — Async AI triggers</div></li>
+<li><div class="icon">🗑</div><div><strong>Soft Deletes</strong> — Never lose data</div></li>
+</ul></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 11: Design System -->
+<div class="slide left">
+<div class="content">
+<div class="tagline anim">Design</div>
+<h2 class="anim anim-d1">Design System</h2>
+<p class="anim anim-d1 mb-md">Minimalist, calm, premium — designed to reduce decision anxiety</p>
+<div class="cols cols-2 gap-lg anim anim-d2">
+<div>
+<h3>Color Palette</h3>
+<div class="swatch"><div class="swatch-circle" style="background:#F9FAFB;border:1px solid #333"></div><div><div class="swatch-name">Background</div><div class="swatch-hex">#F9FAFB</div></div></div>
+<div class="swatch"><div class="swatch-circle" style="background:#4F46E5"></div><div><div class="swatch-name">Accent (Indigo)</div><div class="swatch-hex">#4F46E5</div></div></div>
+<div class="swatch"><div class="swatch-circle" style="background:#111827"></div><div><div class="swatch-name">Text Primary</div><div class="swatch-hex">#111827</div></div></div>
+<div class="swatch"><div class="swatch-circle" style="background:#10B981"></div><div><div class="swatch-name">Success</div><div class="swatch-hex">#10B981</div></div></div>
+<div class="swatch"><div class="swatch-circle" style="background:#F59E0B"></div><div><div class="swatch-name">Warning</div><div class="swatch-hex">#F59E0B</div></div></div>
+<div class="swatch"><div class="swatch-circle" style="background:#EF4444"></div><div><div class="swatch-name">Danger</div><div class="swatch-hex">#EF4444</div></div></div>
+</div>
+<div>
+<h3>UI Principles</h3>
+<div class="card mb-md"><h3>Typography</h3><p>Inter font · Bold headings (700-800) · Regular body (400)</p></div>
+<div class="card mb-md"><h3>Components</h3><p>Pill buttons (9999px radius) · Rounded cards (20px) · No heavy borders</p></div>
+<div class="card"><h3>Interactions</h3><p>Pull-to-refresh · Skeleton loaders · Gradient CTAs · Smooth transitions</p></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 12: App Screens -->
+<div class="slide center">
+<div class="tagline anim">Showcase</div>
+<h2 class="anim anim-d1">App Screens</h2>
+<div class="content cols cols-3 gap-lg mt-md anim anim-d2" style="max-width:1000px">
+<div class="card" style="text-align:center"><div style="font-size:32px;margin-bottom:8px">🔐</div><h3>Auth Flow</h3><p>Login & Register with gradient CTAs, form validation, secure token storage</p></div>
+<div class="card" style="text-align:center"><div style="font-size:32px;margin-bottom:8px">🏠</div><h3>Dashboard</h3><p>Greeting, action cards, quick actions, AI reflection, activity feed</p></div>
+<div class="card" style="text-align:center"><div style="font-size:32px;margin-bottom:8px">📋</div><h3>Decision List</h3><p>Search, category filters, status pills, confidence rings, FAB</p></div>
+<div class="card" style="text-align:center"><div style="font-size:32px;margin-bottom:8px">📄</div><h3>Decision Detail</h3><p>Segmented tabs, outcome timeline, AI analysis button</p></div>
+<div class="card" style="text-align:center"><div style="font-size:32px;margin-bottom:8px">✏️</div><h3>Decision Wizard</h3><p>3-step form with template autofill & confidence slider</p></div>
+<div class="card" style="text-align:center"><div style="font-size:32px;margin-bottom:8px">💬</div><h3>AI Advisor</h3><p>Chat interface with streaming, markdown, session history</p></div>
+</div>
+</div>
+
+<!-- SLIDE 13: Decision Wizard -->
+<div class="slide left">
+<div class="content">
+<div class="tagline anim">Deep Dive</div>
+<h2 class="anim anim-d1">Decision Wizard</h2>
+<div class="cols cols-3 gap-lg mt-md anim anim-d2">
+<div class="card card-accent">
+<h3>Step 1 — Foundations</h3>
+<p>• Template autofill from backend<br>• Title input<br>• Category selection grid (10 categories)<br>• Context/description textarea</p>
+</div>
+<div class="card card-accent">
+<h3>Step 2 — Context</h3>
+<p>• Background & reasoning textarea<br>• Numbered alternative inputs<br>• Add/remove alternatives<br>• Pros & cons for each option</p>
+</div>
+<div class="card card-accent">
+<h3>Step 3 — Calibration</h3>
+<p>• Expected outcome metrics<br>• Target date picker<br>• Confidence slider (1-10)<br>• Submit with validation</p>
+</div>
+</div>
+<div class="mt-md anim anim-d3">
+<span class="badge badge-lavender">useReducer</span>
+<span class="badge badge-lavender" style="margin-left:8px">React Query Mutations</span>
+<span class="badge badge-lavender" style="margin-left:8px">Form Validation</span>
+<span class="badge badge-lavender" style="margin-left:8px">Optimistic UI</span>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 14: Security -->
+<div class="slide left">
+<div class="content">
+<div class="tagline anim">Security</div>
+<h2 class="anim anim-d1">Authentication & Security</h2>
+<div class="cols cols-2 gap-lg mt-md anim anim-d2">
+<div>
+<table>
+<tr><th>Layer</th><th>Implementation</th></tr>
+<tr><td>Passwords</td><td>bcrypt hashing with salt</td></tr>
+<tr><td>Access Tokens</td><td>JWT — 15 min expiry</td></tr>
+<tr><td>Refresh Tokens</td><td>Secure random — 7 day expiry</td></tr>
+<tr><td>Mobile Storage</td><td>expo-secure-store (encrypted keychain)</td></tr>
+<tr><td>API Protection</td><td>Bearer token middleware on all routes</td></tr>
+<tr><td>Auto-Refresh</td><td>Axios interceptor: 401 → refresh → retry</td></tr>
+<tr><td>Data Safety</td><td>Soft deletes — never hard-delete user data</td></tr>
+</table>
+</div>
+<div class="card card-accent" style="display:flex;flex-direction:column;justify-content:center">
+<h3 style="font-size:14px">Auth Flow</h3>
+<div class="arch-block" style="font-size:12px;padding:14px;margin-top:8px;background:transparent;border:none">
+User → Login (email/pass)
+  → Server validates → bcrypt compare
+  → Issue accessToken + refreshToken
+  → Store in SecureStore
+  → Attach to every API request
+  → 401? Auto-refresh → retry
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 15: Background Jobs -->
+<div class="slide center">
+<div class="tagline anim">Automation</div>
+<h2 class="anim anim-d1">Background Intelligence</h2>
+<div class="content cols cols-3 gap-lg mt-lg anim anim-d2" style="max-width:900px">
+<div class="card" style="text-align:center">
+<div class="metric"><div class="num">6h</div><div class="label">Profile Refresh</div></div>
+<p>Recompute user behavioral profile from all decisions & outcomes</p>
+</div>
+<div class="card" style="text-align:center">
+<div class="metric"><div class="num">12h</div><div class="label">Pattern Detection</div></div>
+<p>Discover timing effects, overconfidence, and category biases</p>
+</div>
+<div class="card" style="text-align:center">
+<div class="metric"><div class="num">24h</div><div class="label">Memory Cleanup</div></div>
+<p>Remove expired memories, cap at 50 highest-importance per user</p>
+</div>
+</div>
+<p class="anim anim-d3 mt-lg">Also triggered on-demand when recording outcomes — <strong>fire-and-forget async</strong></p>
+</div>
+
+<!-- SLIDE 16: Data Flow -->
+<div class="slide left">
+<div class="content">
+<div class="tagline anim">Flow</div>
+<h2 class="anim anim-d1">Data Flow: Record an Outcome</h2>
+<div class="pipeline anim anim-d2 mt-md" style="max-width:750px">
+<div class="pipe-step"><div class="pipe-num">1</div><div><div class="pipe-label">User submits outcome form</div><div class="pipe-desc">Satisfaction score, reflections, "would decide again?"</div></div></div>
+<div class="pipe-arrow">↓</div>
+<div class="pipe-step"><div class="pipe-num">2</div><div><div class="pipe-label">POST /outcomes → DB insert</div><div class="pipe-desc">Immediate response: 201 Created → UI shows success ✓</div></div></div>
+<div class="pipe-arrow">↓ async (non-blocking)</div>
+<div class="pipe-step"><div class="pipe-num">3</div><div><div class="pipe-label">extractMemories()</div><div class="pipe-desc">LLM extracts key facts → stored in user_memories table</div></div></div>
+<div class="pipe-arrow">↓</div>
+<div class="pipe-step"><div class="pipe-num">4</div><div><div class="pipe-label">computeProfile()</div><div class="pipe-desc">Aggregate all decisions → LLM generates behavioral summary</div></div></div>
+<div class="pipe-arrow">↓</div>
+<div class="pipe-step"><div class="pipe-num">5</div><div><div class="pipe-label">detectPatterns()</div><div class="pipe-desc">Query decisions + outcomes → discover new behavioral patterns</div></div></div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 17: Metrics -->
+<div class="slide center">
+<div class="tagline anim">Scale</div>
+<h2 class="anim anim-d1">Project Metrics</h2>
+<div class="content cols cols-4 gap-lg mt-lg anim anim-d2" style="max-width:1000px">
+<div class="card"><div class="metric"><div class="num">20+</div><div class="label">DB Tables</div></div></div>
+<div class="card"><div class="metric"><div class="num">40+</div><div class="label">API Endpoints</div></div></div>
+<div class="card"><div class="metric"><div class="num">10+</div><div class="label">App Screens</div></div></div>
+<div class="card"><div class="metric"><div class="num">20+</div><div class="label">Components</div></div></div>
+<div class="card"><div class="metric"><div class="num">5</div><div class="label">AI Services</div></div></div>
+<div class="card"><div class="metric"><div class="num">11K+</div><div class="label">Lines of Code</div></div></div>
+<div class="card"><div class="metric"><div class="num">15+</div><div class="label">Technologies</div></div></div>
+<div class="card"><div class="metric"><div class="num">10</div><div class="label">Schema Modules</div></div></div>
+</div>
+</div>
+
+<!-- SLIDE 18: Challenges -->
+<div class="slide left">
+<div class="content">
+<div class="tagline anim">Lessons</div>
+<h2 class="anim anim-d1">Challenges & Solutions</h2>
+<div class="anim anim-d2 mt-md">
+<table>
+<tr><th>Challenge</th><th>Solution</th></tr>
+
+
+<tr><td>AI chat response latency</td><td>SSE streaming for real-time token delivery</td></tr>
+<tr><td>Data consistency for AI analysis</td><td>Fire-and-forget async triggers (non-blocking)</td></tr>
+<tr><td>JWT token expiry during app use</td><td>Axios interceptor auto-refresh + retry</td></tr>
+<tr><td>Complex decision form state</td><td>useReducer with typed action dispatch</td></tr>
+<tr><td>IoT hardware integration for health tracking</td><td>Future R&D — custom wearable devices with BLE protocol</td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 19: Future Scope -->
+<div class="slide left">
+<div class="content">
+<div class="tagline anim">Vision</div>
+<h2 class="anim anim-d1">Future Scope</h2>
+<div class="anim anim-d2 mt-md" style="display:flex;gap:20px">
+<!-- IoT Hero Card -->
+<div class="card card-accent" style="flex:1;padding:24px;border:1px solid rgba(79,70,229,0.3)">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+<div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#8B5CF6);display:flex;align-items:center;justify-content:center;font-size:22px">⌚</div>
+<div><div style="font-weight:800;font-size:18px">IoT Health Tracking</div><div style="font-size:11px;color:var(--accent-light);font-weight:600;margin-top:2px">THE BIG VISION</div></div>
+</div>
+<p style="font-size:13px;line-height:1.7;color:var(--text-muted)">Track life activities through <strong style="color:var(--text)">smart wearable sensors</strong> — heart rate, SpO2, sleep quality, walking & running metrics.</p>
+<div style="margin-top:14px;padding:12px 16px;border-radius:12px;background:rgba(79,70,229,0.08);border:1px solid rgba(79,70,229,0.15)">
+<p style="font-size:12px;font-weight:700;color:var(--accent-light);margin-bottom:6px">🎯 LifeOS Smart Device</p>
+<p style="font-size:11px;color:var(--text-muted);line-height:1.6">Launch our own tracking hardware — a wristband that monitors <strong style="color:var(--text)">heart, SpO2, sleep, steps</strong>. All data feeds into LifeOS to generate an overall <strong style="color:var(--success)">Life Habits Score</strong> — AI correlates your health data with decision quality.</p>
+</div>
+<div style="display:flex;gap:6px;margin-top:12px;flex-wrap:wrap">
+<span class="badge badge-warning" style="font-size:9px">❤️ Heart Rate</span>
+<span class="badge badge-danger" style="font-size:9px">🫁 SpO2</span>
+<span class="badge badge-lavender" style="font-size:9px">😴 Sleep</span>
+<span class="badge badge-success" style="font-size:9px">🏃 Activity</span>
+<span class="badge badge-accent" style="font-size:9px">⭐ Life Score</span>
+</div>
+</div>
+<!-- Other Future Items -->
+<div style="flex:0 0 280px;display:flex;flex-direction:column;gap:8px">
+<div class="card" style="padding:14px 18px;display:flex;align-items:center;gap:12px"><div style="font-size:18px">🌙</div><div><div style="font-weight:700;font-size:13px">Dark Mode</div><p style="font-size:10px;margin-top:1px">Full midnight blue theme</p></div></div>
+<div class="card" style="padding:14px 18px;display:flex;align-items:center;gap:12px"><div style="font-size:18px">🔔</div><div><div style="font-weight:700;font-size:13px">Push Notifications</div><p style="font-size:10px;margin-top:1px">Check-in reminders via Expo Push</p></div></div>
+<div class="card" style="padding:14px 18px;display:flex;align-items:center;gap:12px"><div style="font-size:18px">👥</div><div><div style="font-weight:700;font-size:13px">Decision Sharing</div><p style="font-size:10px;margin-top:1px">Share anonymized decisions socially</p></div></div>
+<div class="card" style="padding:14px 18px;display:flex;align-items:center;gap:12px"><div style="font-size:18px">📊</div><div><div style="font-weight:700;font-size:13px">Advanced Analytics</div><p style="font-size:10px;margin-top:1px">Charts, heatmaps, quality timeline</p></div></div>
+<div class="card" style="padding:14px 18px;display:flex;align-items:center;gap:12px"><div style="font-size:18px">🎙</div><div><div style="font-weight:700;font-size:13px">Voice Input</div><p style="font-size:10px;margin-top:1px">Speech-to-text for decisions</p></div></div>
+<div class="card" style="padding:14px 18px;display:flex;align-items:center;gap:12px"><div style="font-size:18px">📤</div><div><div style="font-weight:700;font-size:13px">Export / Backup</div><p style="font-size:10px;margin-top:1px">CSV/PDF decision journal export</p></div></div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<!-- SLIDE: Conclusion -->
+<div class="slide center">
+<div class="glow glow-1"></div><div class="glow glow-2"></div>
+<div class="tagline anim">Conclusion</div>
+<h2 class="anim anim-d1" style="font-size:48px">Decide better.<br><span style="color:var(--accent-light)">Learn faster.</span><br>Live intentionally.</h2>
+<p class="subtitle anim anim-d2 mt-md">LifeOS closes the gap between making decisions and learning from them.<br>It's the first platform that builds a personalized AI model of <em>your</em> decision-making patterns.</p>
+<div class="mt-lg anim anim-d3">
+<span class="badge badge-accent" style="font-size:14px;padding:8px 20px">Live Demo →</span>
+</div>
+<p class="anim anim-d4 mt-lg" style="font-size:18px;font-weight:700;color:var(--text)">Thank You!</p>
+<p class="anim anim-d5" style="font-size:14px;color:var(--text-muted)">Questions?</p>
+</div>
+</div>
+
+<div class="progress-nav"><div class="progress-bar" id="progress-bar"></div></div>
+<div class="controls" id="slide-num">1 / 20</div>
+<img src="logo.webp" alt="LifeOS" style="position:fixed;top:20px;right:24px;width:80px;height:80px;border-radius:8px;object-fit:cover;;z-index:100">
+
+<script src="slides.js"></script>
+</body>
+</html>

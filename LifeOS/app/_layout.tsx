@@ -5,7 +5,11 @@ import { useFonts, Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_7
 import * as SplashScreen from 'expo-splash-screen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useAuthStore } from "@/store/authStore";
+import { validateEnv } from '@/utils/env';
 import '../global.css';
+
+// ─── Validate environment on startup ─────────────────────────────────────────
+validateEnv();
 
 // ─── Keep splash visible until everything is ready ───────────────────────────
 SplashScreen.preventAutoHideAsync();

@@ -1,11 +1,12 @@
 /**
- * Greeting — Time-aware greeting with user's name.
+ * Greeting — Time-aware greeting with user's name and decorative accent.
  */
 
 import React from 'react';
 import { View, Text } from 'react-native';
 import { SkeletonBlock } from '@/components/ui';
 import { getGreeting } from '@/utils/helpers';
+import { COLORS, SPACING, TYPOGRAPHY } from '@/utils/designTokens';
 
 type GreetingProps = {
     firstName?: string;
@@ -13,33 +14,21 @@ type GreetingProps = {
 };
 
 export const Greeting: React.FC<GreetingProps> = ({ firstName, isLoading }) => (
-    <View style={{ paddingHorizontal: 24, marginBottom: 28 }}>
+    <View style={{ paddingHorizontal: SPACING.xxl, marginBottom: SPACING.xxl }}>
         {isLoading ? (
             <>
-                <SkeletonBlock width={220} height={36} style={{ marginBottom: 8 }} />
+                <SkeletonBlock width={220} height={36} style={{ marginBottom: SPACING.sm }} />
                 <SkeletonBlock width={180} height={18} />
             </>
         ) : (
             <>
-                <Text
-                    style={{
-                        fontFamily: 'Inter_800ExtraBold',
-                        fontSize: 32,
-                        color: '#111827',
-                        letterSpacing: -1.5,
-                        lineHeight: 38,
-                    }}
-                >
-                    {getGreeting()}, {firstName ?? 'there'}
-                </Text>
-                <Text
-                    style={{
-                        fontFamily: 'Inter_400Regular',
-                        fontSize: 15,
-                        color: '#6B7280',
-                        marginTop: 4,
-                    }}
-                >
+                <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: SPACING.md }}>
+                    <Text style={[TYPOGRAPHY.h1, { color: COLORS.textPrimary }]}>
+                        {getGreeting()}, {firstName ?? 'there'}
+                    </Text>
+                    <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: COLORS.success, marginBottom: 4 }} />
+                </View>
+                <Text style={[TYPOGRAPHY.bodyLarge, { color: COLORS.textSecondary, marginTop: SPACING.xs }]}>
                     Ready to optimize your day?
                 </Text>
             </>

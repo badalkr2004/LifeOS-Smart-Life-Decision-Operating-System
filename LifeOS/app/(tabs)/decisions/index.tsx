@@ -1,15 +1,12 @@
 /**
  * Decision List Screen
- *
- * Thin compositor: manages search/filter state, delegates
- * card rendering to DecisionCard and DecisionCardSkeleton.
+ * Search, filter, and browse all decisions with category/status filters.
  */
 
 import React, { useState, useCallback } from 'react';
 import {
     View,
     Text,
-    ScrollView,
     TouchableOpacity,
     RefreshControl,
     StatusBar,
@@ -25,6 +22,7 @@ import { useDecisions, decisionKeys } from '@/hooks/useDecisions';
 import { CATEGORY_FILTERS, STATUS_FILTERS } from '@/utils/constants';
 import { DecisionCard, DecisionCardSkeleton } from '@/components/decisions';
 import { EmptyState } from '@/components/ui';
+import { COLORS, SPACING, RADII, SHADOWS, TYPOGRAPHY } from '@/utils/designTokens';
 
 export default function DecisionListScreen() {
     const router = useRouter();
@@ -62,133 +60,64 @@ export default function DecisionListScreen() {
     const handleDetail = (id: string) => router.push(`/(tabs)/decisions/${id}`);
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#F9FAFB' }}>
-            <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
+        <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.surface }}>
+            <StatusBar barStyle="dark-content" backgroundColor={COLORS.surface} />
 
             {/* ── Header ── */}
-            <View
-                style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    paddingHorizontal: 24,
-                    paddingTop: 8,
-                    paddingBottom: 16,
-                }}
-            >
-                <Text
-                    style={{
-                        fontFamily: 'Inter_800ExtraBold',
-                        fontSize: 28,
-                        color: '#111827',
-                        letterSpacing: -1,
-                    }}
-                >
-                    My Decisions
-                </Text>
-                <TouchableOpacity
-                    onPress={() => {/* sort options */ }}
-                    style={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: 12,
-                        backgroundColor: '#FFFFFF',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        shadowColor: 'rgba(0,0,0,0.5)',
-                        shadowOffset: { width: 0, height: 2 },
-                        shadowOpacity: 0.04,
-                        shadowRadius: 8,
-                        elevation: 1,
-                    }}
-                >
-                    <Ionicons name="options-outline" size={20} color="#464555" />
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: SPACING.xxl, paddingTop: SPACING.sm, paddingBottom: SPACING.lg }}>
+                <Text style={[TYPOGRAPHY.h1, { color: COLORS.textPrimary }]}>My Decisions</Text>
+                <TouchableOpacity style={{ width: 40, height: 40, borderRadius: 12, backgroundColor: COLORS.surfaceLowest, alignItems: 'center', justifyContent: 'center', ...SHADOWS.card }}>
+                    <Ionicons name="options-outline" size={20} color={COLORS.textMuted} />
                 </TouchableOpacity>
             </View>
 
             {/* ── Search Bar ── */}
-            <View style={{ paddingHorizontal: 20, marginBottom: 14 }}>
-                <View
-                    style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        backgroundColor: '#FFFFFF',
-                        borderRadius: 14,
-                        paddingHorizontal: 14,
-                        height: 48,
-                        shadowColor: 'rgba(0,0,0,0.5)',
-                        shadowOffset: { width: 0, height: 2 },
-                        shadowOpacity: 0.03,
-                        shadowRadius: 8,
-                        elevation: 1,
-                    }}
-                >
+            <View style={{ paddingHorizontal: SPACING.xl, marginBottom: SPACING.md }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.surfaceLowest, borderRadius: RADII.md, paddingHorizontal: SPACING.md, height: 48, ...SHADOWS.card }}>
                     <Ionicons name="search-outline" size={18} color="#9CA3AF" />
                     <TextInput
                         value={searchQuery}
                         onChangeText={setSearchQuery}
                         placeholder="Search decisions..."
                         placeholderTextColor="#9CA3AF"
-                        style={{
-                            flex: 1,
-                            fontFamily: 'Inter_400Regular',
-                            fontSize: 15,
-                            color: '#111827',
-                            marginLeft: 10,
-                            height: 48,
-                        }}
+                        style={{ flex: 1, fontFamily: 'Inter_400Regular', fontSize: 15, color: COLORS.textPrimary, marginLeft: 10, height: 48 }}
                     />
                     {searchQuery.length > 0 && (
                         <TouchableOpacity onPress={() => setSearchQuery('')}>
-                            <Ionicons name="close-circle" size={18} color="#C7C4D8" />
+                            <Ionicons name="close-circle" size={18} color={COLORS.outlineVariant} />
                         </TouchableOpacity>
                     )}
                 </View>
             </View>
 
             {/* ── Category Filters ── */}
-            <ScrollView
+            <FlatList
                 horizontal
+                data={CATEGORY_FILTERS}
+                keyExtractor={(item) => item.key}
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{ paddingHorizontal: 20, gap: 8, alignItems: 'center' }}
-                style={{ maxHeight: 48, flexGrow: 0, marginBottom: 8 }}
-            >
-                {CATEGORY_FILTERS.map((cat) => {
+                contentContainerStyle={{ paddingHorizontal: SPACING.xl, gap: SPACING.sm }}
+                style={{ maxHeight: 44, flexGrow: 0, marginBottom: SPACING.md }}
+                renderItem={({ item: cat }) => {
                     const isActive = selectedCategory === cat.key;
                     return (
                         <TouchableOpacity
                             key={cat.key}
                             onPress={() => setSelectedCategory(isActive ? '' : cat.key)}
                             activeOpacity={0.8}
-                            style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                gap: 6,
-                                paddingHorizontal: 14,
-                                paddingVertical: 9,
-                                borderRadius: 12,
-                                backgroundColor: isActive ? '#4F46E5' : '#FFFFFF',
-                                borderWidth: 1,
-                                borderColor: isActive ? '#4F46E5' : '#E5E7EB',
-                            }}
+                            style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: SPACING.md, paddingVertical: 9, borderRadius: RADII.md, backgroundColor: isActive ? COLORS.primary : COLORS.surfaceLowest, borderWidth: 1, borderColor: isActive ? COLORS.primary : COLORS.surfaceDim }}
                         >
-                            <Ionicons name={cat.icon} size={15} color={isActive ? '#FFFFFF' : '#6B7280'} />
-                            <Text
-                                style={{
-                                    fontFamily: 'Inter_600SemiBold',
-                                    fontSize: 13,
-                                    color: isActive ? '#FFFFFF' : '#374151',
-                                }}
-                            >
+                            <Ionicons name={cat.icon} size={15} color={isActive ? COLORS.textOnPrimary : COLORS.textSecondary} />
+                            <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 13, color: isActive ? COLORS.textOnPrimary : COLORS.textBody }}>
                                 {cat.label}
                             </Text>
                         </TouchableOpacity>
                     );
-                })}
-            </ScrollView>
+                }}
+            />
 
-            {/* ── Status Filters ── */}
-            <View style={{ flexDirection: 'row', paddingHorizontal: 20, gap: 8, marginBottom: 16 }}>
+            {/* ── Status Filters + Count ── */}
+            <View style={{ flexDirection: 'row', paddingHorizontal: SPACING.xl, gap: SPACING.sm, marginBottom: SPACING.xl }}>
                 {STATUS_FILTERS.map((sf) => {
                     const isActive = selectedStatus === sf.key;
                     return (
@@ -196,97 +125,50 @@ export default function DecisionListScreen() {
                             key={sf.key}
                             onPress={() => setSelectedStatus(isActive ? '' : sf.key)}
                             activeOpacity={0.8}
-                            style={{
-                                paddingHorizontal: 14,
-                                paddingVertical: 7,
-                                borderRadius: 9999,
-                                backgroundColor: isActive ? '#111827' : 'transparent',
-                                borderWidth: isActive ? 0 : 1,
-                                borderColor: '#E5E7EB',
-                            }}
+                            style={{ paddingHorizontal: SPACING.md, paddingVertical: 7, borderRadius: RADII.full, backgroundColor: isActive ? COLORS.textPrimary : 'transparent', borderWidth: isActive ? 0 : 1, borderColor: COLORS.surfaceDim }}
                         >
-                            <Text
-                                style={{
-                                    fontFamily: 'Inter_600SemiBold',
-                                    fontSize: 12,
-                                    color: isActive ? '#FFFFFF' : '#6B7280',
-                                }}
-                            >
+                            <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 12, color: isActive ? COLORS.textOnPrimary : COLORS.textSecondary }}>
                                 {sf.label}
                             </Text>
                         </TouchableOpacity>
                     );
                 })}
-                <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }}>
-                    {!isLoading && (
-                        <Text style={{ fontFamily: 'Inter_500Medium', fontSize: 13, color: '#9CA3AF' }}>
+                {!isLoading && (
+                    <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }}>
+                        <Text style={[TYPOGRAPHY.bodySmall, { color: '#9CA3AF' }]}>
                             {filteredDecisions.length} decision{filteredDecisions.length !== 1 ? 's' : ''}
                         </Text>
-                    )}
-                </View>
+                    </View>
+                )}
             </View>
 
             {/* ── Decision List ── */}
             <View style={{ flex: 1 }}>
                 {isLoading ? (
-                    <ScrollView showsVerticalScrollIndicator={false}>
-                        {[1, 2, 3, 4].map((i) => (
-                            <DecisionCardSkeleton key={i} />
-                        ))}
-                    </ScrollView>
-                ) : filteredDecisions.length === 0 ? (
-                    <EmptyState
-                        icon="scale-outline"
-                        title="No decisions yet"
-                        subtitle="Start tracking your life decisions to unlock AI-powered insights and patterns."
-                        ctaLabel="Create Your First Decision"
-                        onCta={handleNew}
+                    <FlatList
+                        data={[1, 2, 3, 4]}
+                        keyExtractor={(i) => String(i)}
+                        renderItem={() => <DecisionCardSkeleton />}
+                        showsVerticalScrollIndicator={false}
                     />
+                ) : filteredDecisions.length === 0 ? (
+                    <EmptyState icon="scale-outline" title="No decisions yet" subtitle="Start tracking your life decisions to unlock AI-powered insights and patterns." ctaLabel="Create Your First Decision" onCta={handleNew} />
                 ) : (
                     <FlatList
                         data={filteredDecisions}
                         keyExtractor={(item) => item.id}
-                        renderItem={({ item }) => (
-                            <DecisionCard decision={item} onPress={() => handleDetail(item.id)} />
-                        )}
+                        renderItem={({ item }) => <DecisionCard decision={item} onPress={() => handleDetail(item.id)} />}
                         showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{ paddingBottom: 100 }}
-                        refreshControl={
-                            <RefreshControl
-                                refreshing={isRefetching}
-                                onRefresh={onRefresh}
-                                tintColor="#4F46E5"
-                                colors={['#4F46E5']}
-                            />
-                        }
+                        contentContainerStyle={{ paddingBottom: 120 }}
+                        refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={onRefresh} tintColor={COLORS.primary} colors={[COLORS.primary]} />}
                     />
                 )}
             </View>
 
             {/* ── FAB ── */}
-            <TouchableOpacity
-                onPress={handleNew}
-                activeOpacity={0.85}
-                style={{ position: 'absolute', bottom: 24, right: 24, zIndex: 10 }}
-            >
-                <LinearGradient
-                    colors={['#3525CD', '#4F46E5']}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
-                    style={{
-                        width: 58,
-                        height: 58,
-                        borderRadius: 20,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        shadowColor: '#4F46E5',
-                        shadowOffset: { width: 0, height: 8 },
-                        shadowOpacity: 0.35,
-                        shadowRadius: 16,
-                        elevation: 8,
-                    }}
-                >
-                    <Ionicons name="add" size={28} color="#FFFFFF" />
+            <TouchableOpacity onPress={handleNew} activeOpacity={0.85} style={{ position: 'absolute', bottom: 24, right: 24, zIndex: 10 }}>
+                <LinearGradient colors={['#3525CD', COLORS.primary]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ width: 58, height: 58, borderRadius: 20, alignItems: 'center', justifyContent: 'center', ...SHADOWS.fab }}>
+                    <Ionicons name="add" size={28} color={COLORS.textOnPrimary} />
                 </LinearGradient>
             </TouchableOpacity>
         </SafeAreaView>

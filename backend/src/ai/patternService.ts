@@ -251,7 +251,7 @@ function detectConfidenceCalibration(
     if (!outcome) continue;
 
     if (!byCategory[d.category]) byCategory[d.category] = [];
-    byCategory[d.category].push({
+    byCategory[d.category]!.push({
       confidence: d.confidenceLevel,
       satisfaction: outcome.satisfactionScore,
     });
@@ -298,10 +298,11 @@ function detectCategoryRegretPatterns(
 
     if (!byCategory[d.category])
       byCategory[d.category] = { total: 0, regrets: 0, lowSat: 0 };
-    byCategory[d.category].total++;
+    const catStats = byCategory[d.category]!;
+    catStats.total++;
 
-    if (outcome.wouldDecideAgain === false) byCategory[d.category].regrets++;
-    if (outcome.satisfactionScore <= 4) byCategory[d.category].lowSat++;
+    if (outcome.wouldDecideAgain === false) catStats.regrets++;
+    if (outcome.satisfactionScore <= 4) catStats.lowSat++;
   }
 
   for (const [cat, stats] of Object.entries(byCategory)) {
@@ -389,7 +390,7 @@ async function generateLLMPatternInsights(
         outcome: p.pattern.outcome,
       })),
     ),
-    maxTokens: 500,
+    maxOutputTokens: 500,
   });
 
   // Store insights as user memories

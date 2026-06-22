@@ -36,7 +36,7 @@ export default function DashboardScreen() {
     const { data: insight, isLoading: insightLoading } = useTopInsight();
     const { data: recentDecisions = [], isLoading: decisionsLoading } = useRecentDecisions();
 
-    const isRefreshing = userLoading && checkinsLoading;
+    const isRefreshing = userLoading || checkinsLoading;
 
     const onRefresh = useCallback(() => {
         queryClient.invalidateQueries({ queryKey: dashboardKeys.user });

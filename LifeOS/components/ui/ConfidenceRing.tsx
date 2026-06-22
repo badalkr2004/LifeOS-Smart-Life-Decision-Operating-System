@@ -5,9 +5,10 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
+import { COLORS, TYPOGRAPHY } from '@/utils/designTokens';
 
 type ConfidenceRingProps = {
-    value: number;       // 1–10
+    value: number;
     size?: number;
     strokeWidth?: number;
     color?: string;
@@ -17,7 +18,7 @@ export const ConfidenceRing: React.FC<ConfidenceRingProps> = ({
     value,
     size = 72,
     strokeWidth = 6,
-    color = '#4F46E5',
+    color = COLORS.primary,
 }) => {
     const percentage = value * 10;
     const radius = (size - strokeWidth) / 2;
@@ -25,20 +26,9 @@ export const ConfidenceRing: React.FC<ConfidenceRingProps> = ({
     const progress = circumference - (percentage / 100) * circumference;
 
     return (
-        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-            <Svg
-                width={size}
-                height={size}
-                style={{ transform: [{ rotate: '-90deg' }] }}
-            >
-                <Circle
-                    cx={size / 2}
-                    cy={size / 2}
-                    r={radius}
-                    stroke="#E5E7EB"
-                    strokeWidth={strokeWidth}
-                    fill="none"
-                />
+        <View style={{ alignItems: 'center', justifyContent: 'center' }} accessible accessibilityLabel={`${percentage}% confidence`}>
+            <Svg width={size} height={size} style={{ transform: [{ rotate: '-90deg' }] }}>
+                <Circle cx={size / 2} cy={size / 2} r={radius} stroke={COLORS.surfaceDim} strokeWidth={strokeWidth} fill="none" />
                 <Circle
                     cx={size / 2}
                     cy={size / 2}
@@ -51,22 +41,8 @@ export const ConfidenceRing: React.FC<ConfidenceRingProps> = ({
                     strokeLinecap="round"
                 />
             </Svg>
-            <View
-                style={{
-                    position: 'absolute',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                }}
-            >
-                <Text
-                    style={{
-                        fontFamily: 'Inter_800ExtraBold',
-                        fontSize: 18,
-                        color: '#111827',
-                    }}
-                >
-                    {percentage}%
-                </Text>
+            <View style={{ position: 'absolute', alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={[TYPOGRAPHY.h2, { color: COLORS.textPrimary }]}>{percentage}%</Text>
             </View>
         </View>
     );

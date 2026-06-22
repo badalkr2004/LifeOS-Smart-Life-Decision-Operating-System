@@ -1,5 +1,5 @@
 import apiClient from "@/utils/api";
-import * as SecureStore from "expo-secure-store";
+import { useAuthStore } from "@/store/authStore";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -136,11 +136,16 @@ export const aiService = {
     onError: (err: Error) => void,
     onComplete: () => void,
   ): Promise<void> => {
-    const token = await SecureStore.getItemAsync("lifeos_access_token");
     const baseURL =
       process.env.EXPO_PUBLIC_API_URL ?? "http://localhost:8000/api/v1";
 
-    try {
+    // Get token from the Zustand store (hydrated on app start by _layout.tsx)
+    const getToken = () => useAuthStore.getState().accessToken;
+
+    const doFetch = async (retried = false): Promise<void> => {
+      const token = getToken();
+      if (!token) throw new Error("Not authenticated");
+
       const response = await fetch(`${baseURL}/ai/chat`, {
         method: "POST",
         headers: {
@@ -150,6 +155,17 @@ export const aiService = {
         },
         body: JSON.stringify(payload),
       });
+
+      // If 401 and we haven't retried yet, trigger refresh via axios interceptor
+      if (response.status === 401 && !retried) {
+        try {
+          // Make a dummy API call to trigger the interceptor's refresh logic
+          await apiClient.get("/users/me", { timeout: 5000 });
+        } catch {
+          // Interceptor handles refresh — if it fails, we'll get a fresh 401 on retry
+        }
+        return doFetch(true);
+      }
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -202,6 +218,10 @@ export const aiService = {
         onEvent({ type: "done", usage: 0 });
         onComplete();
       }
+    };
+
+    try {
+      await doFetch();
     } catch (err: any) {
       onError(err);
     }

@@ -154,13 +154,13 @@ export const chat = async (req: AuthRequest, res: Response): Promise<void> => {
       model: models.chat,
       system: `${SYSTEM_PROMPTS.advisor}\n\n${context.fullPrompt}`,
       messages,
-      maxTokens: 1000,
+      maxOutputTokens: 1000,
       onChunk: ({ chunk }) => {
         if (chunk.type === "text-delta") {
           res.write(
-            `data: ${JSON.stringify({ type: "delta", text: chunk.textDelta })}\n\n`,
+            `data: ${JSON.stringify({ type: "delta", text: chunk.text })}\n\n`,
           );
-          fullResponse += chunk.textDelta;
+          fullResponse += chunk.text;
         }
       },
       onFinish: async ({ usage }) => {
@@ -445,7 +445,7 @@ export const preDecisionAnalysis = async (
           system:
             "You are a concise decision advisor. Given the analysis data and user context, write a 2-3 sentence personalized summary. Be specific, reference their history.",
           prompt: `Decision: "${title}" (${category})\nContext: ${assembledContext.fullPrompt}\nRisk factors: ${JSON.stringify(riskFactors)}\nSupporting evidence: ${JSON.stringify(supportingEvidence)}`,
-          maxTokens: 200,
+          maxOutputTokens: 200,
         });
         if (llmResult.text) aiEnhancedSummary = llmResult.text;
       } catch {
@@ -531,7 +531,7 @@ export const analyzeDecision = async (
         prompt:
           prompt ||
           "Analyze this decision in detail. What are the key factors, risks, and recommendations?",
-        maxTokens: 800,
+        maxOutputTokens: 800,
       });
       analysis = { text: result.text, model: "gpt-4o" };
     } else {

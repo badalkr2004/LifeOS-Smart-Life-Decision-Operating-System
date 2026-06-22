@@ -41,7 +41,7 @@ export async function extractAndStoreMemories(
       model: models.extraction,
       system: SYSTEM_PROMPTS.memoryExtraction,
       prompt: content,
-      maxTokens: 500,
+      maxOutputTokens: 500,
     });
 
     let memories: ExtractedMemory[] = [];

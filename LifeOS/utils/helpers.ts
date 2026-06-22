@@ -52,17 +52,33 @@ export function getCategoryIconOutline(category: string): IoniconsName {
 /** Brand colour for each decision category */
 export function getCategoryColor(category: string): string {
     const map: Record<string, string> = {
-        career: '#4F46E5',
-        financial: '#059669',
-        health: '#DC2626',
-        relationship: '#7C3AED',
-        education: '#2563EB',
-        lifestyle: '#16A34A',
-        business: '#EA580C',
-        personal_growth: '#0891B2',
-        family: '#DB2777',
+        career: '#3B82F6',
+        financial: '#10B981',
+        health: '#F59E0B',
+        relationship: '#EC4899',
+        education: '#8B5CF6',
+        lifestyle: '#06B6D4',
+        business: '#F97316',
+        personal_growth: '#6366F1',
+        family: '#E11D48',
     };
     return map[category] ?? '#6B7280';
+}
+
+/** Light background for each decision category */
+export function getCategoryBg(category: string): string {
+    const map: Record<string, string> = {
+        career: '#EFF6FF',
+        financial: '#ECFDF5',
+        health: '#FFFBEB',
+        relationship: '#FDF2F8',
+        education: '#F5F3FF',
+        lifestyle: '#ECFEFF',
+        business: '#FFF7ED',
+        personal_growth: '#EEF2FF',
+        family: '#FFF1F2',
+    };
+    return map[category] ?? '#F3F4F6';
 }
 
 // ─── Status Helpers ───────────────────────────────────────────────────────────

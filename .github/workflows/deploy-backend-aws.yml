@@ -1,0 +1,57 @@
+name: Deploy Backend to AWS
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "backend/**"
+      - "infra/aws/**"
+      - ".github/workflows/deploy-backend-aws.yml"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Build Lambda bundle
+        working-directory: backend
+        run: npm run build:lambda
+
+      - name: Create deployment zip
+        working-directory: backend/dist
+        run: zip -9 lambda.zip lambda.cjs
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION || 'ap-south-1' }}
+
+      - name: Deploy Lambda Function URL
+        env:
+          AWS_REGION: ${{ vars.AWS_REGION || 'ap-south-1' }}
+          FUNCTION_NAME: ${{ vars.BACKEND_FUNCTION_NAME || 'lifeos-backend-poc' }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          CORS_ALLOW_ORIGIN: ${{ vars.CORS_ALLOW_ORIGIN || '*' }}
+          RESERVED_CONCURRENCY: ${{ vars.RESERVED_CONCURRENCY || '2' }}
+        run: bash infra/aws/deploy-lambda-url.sh

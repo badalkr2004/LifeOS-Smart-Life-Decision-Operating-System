@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "npx tsx watch src/index.ts",
     "db:generate": "drizzle-kit generate --config drizzle.config.ts",
-    "db:migrate": "drizzle-kit migrate --config drizzle.config.ts"
+    "db:migrate": "drizzle-kit migrate --config drizzle.config.ts",
+    "build:lambda": "esbuild src/lambda.ts --bundle --platform=node --target=node22 --format=cjs --outfile=dist/lambda.cjs --log-level=info"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -30,11 +31,13 @@
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "drizzle-orm": "^0.45.1",
+    "esbuild": "^0.28.1",
     "express": "^5.2.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.20.0",
     "postgres": "^3.4.8",
+    "serverless-http": "^4.0.0",
     "zod": "^4.3.6"
   }
 }

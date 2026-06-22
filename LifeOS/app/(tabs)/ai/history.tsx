@@ -4,160 +4,100 @@
  */
 
 import React from 'react';
-import {
-    View,
-    Text,
-    TouchableOpacity,
-    FlatList,
-    StatusBar,
-    ActivityIndicator,
-} from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, StatusBar, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useChatSessions } from '@/hooks/useAI';
+import { COLORS, SPACING, RADII, SHADOWS, TYPOGRAPHY } from '@/utils/designTokens';
 import type { ChatSession } from '@/services/aiService';
 
 export default function AiHistoryScreen() {
     const router = useRouter();
-    const { data: sessions, isLoading, refetch } = useChatSessions();
+    const { data: sessions, isLoading, isError, refetch } = useChatSessions();
 
     const handleSessionPress = (session: ChatSession) => {
-        router.push({
-            pathname: '/(tabs)/ai',
-            params: { sessionId: session.id },
-        });
+        router.push({ pathname: '/(tabs)/ai', params: { sessionId: session.id } });
     };
 
     const renderSession = ({ item }: { item: ChatSession }) => {
         const timeAgo = getRelativeTime(item.lastMessageAt);
-
         return (
             <TouchableOpacity
                 onPress={() => handleSessionPress(item)}
                 activeOpacity={0.7}
-                style={{
-                    backgroundColor: '#FFFFFF',
-                    borderRadius: 16,
-                    padding: 16,
-                    marginHorizontal: 16,
-                    marginBottom: 10,
-                    shadowColor: 'rgba(0,0,0,0.5)',
-                    shadowOffset: { width: 0, height: 1 },
-                    shadowOpacity: 0.03,
-                    shadowRadius: 6,
-                    elevation: 1,
-                }}
+                style={{ backgroundColor: COLORS.surfaceLowest, borderRadius: RADII.lg, padding: SPACING.lg, marginHorizontal: SPACING.lg, marginBottom: 10, ...SHADOWS.card }}
             >
-                <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 12 }}>
-                    <View
-                        style={{
-                            width: 36,
-                            height: 36,
-                            borderRadius: 12,
-                            backgroundColor: '#EEF2FF',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
-                    >
-                        <Ionicons name="chatbubbles-outline" size={18} color="#4F46E5" />
+                <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: SPACING.md }}>
+                    <View style={{ width: 40, height: 40, borderRadius: RADII.md, backgroundColor: COLORS.primaryFixed, alignItems: 'center', justifyContent: 'center' }}>
+                        <Ionicons name="chatbubbles-outline" size={20} color={COLORS.primary} />
                     </View>
                     <View style={{ flex: 1 }}>
-                        <Text
-                            style={{
-                                fontFamily: 'Inter_600SemiBold',
-                                fontSize: 15,
-                                color: '#111827',
-                                marginBottom: 4,
-                            }}
-                            numberOfLines={2}
-                        >
+                        <Text style={[TYPOGRAPHY.heading, { color: COLORS.textPrimary, marginBottom: 4 }]} numberOfLines={2}>
                             {item.title || 'Untitled Chat'}
                         </Text>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: SPACING.md }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                                 <Ionicons name="chatbubble-outline" size={12} color="#9CA3AF" />
-                                <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 12, color: '#9CA3AF' }}>
+                                <Text style={[TYPOGRAPHY.bodySmall, { color: '#9CA3AF' }]}>
                                     {item.messageCount || 0} messages
                                 </Text>
                             </View>
-                            <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 12, color: '#9CA3AF' }}>
+                            <Text style={[TYPOGRAPHY.bodySmall, { color: '#9CA3AF' }]}>
                                 {timeAgo}
                             </Text>
                         </View>
                     </View>
-                    <Ionicons name="chevron-forward" size={16} color="#D1D5DB" style={{ marginTop: 8 }} />
+                    <Ionicons name="chevron-forward" size={16} color={COLORS.outlineVariant} style={{ marginTop: 8 }} />
                 </View>
             </TouchableOpacity>
         );
     };
 
-    return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#F4F5F7' }}>
-            <StatusBar barStyle="dark-content" backgroundColor="#F4F5F7" />
+    // Error state
+    if (isError && !isLoading) {
+        return (
+            <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.surface }}>
+                <StatusBar barStyle="dark-content" backgroundColor={COLORS.surface} />
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: SPACING.xxl }}>
+                    <Ionicons name="alert-circle-outline" size={48} color={COLORS.danger} />
+                    <Text style={[TYPOGRAPHY.heading, { color: COLORS.textPrimary, marginTop: SPACING.lg, textAlign: 'center' }]}>Could not load history</Text>
+                    <TouchableOpacity onPress={() => refetch()} style={{ marginTop: SPACING.lg, backgroundColor: COLORS.primary, borderRadius: RADII.md, paddingHorizontal: SPACING.xxl, paddingVertical: SPACING.md }}>
+                        <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 14, color: COLORS.textOnPrimary }}>Retry</Text>
+                    </TouchableOpacity>
+                </View>
+            </SafeAreaView>
+        );
+    }
 
-            {/* ── Header ── */}
-            <View
-                style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    paddingHorizontal: 16,
-                    paddingVertical: 12,
-                    borderBottomWidth: 1,
-                    borderBottomColor: '#F0F0F0',
-                    gap: 12,
-                }}
-            >
-                <TouchableOpacity onPress={() => router.back()} style={{ padding: 8 }}>
-                    <Ionicons name="arrow-back" size={22} color="#111827" />
+    return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.surface }}>
+            <StatusBar barStyle="dark-content" backgroundColor={COLORS.surface} />
+
+            {/* Header */}
+            <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: SPACING.lg, paddingVertical: SPACING.md, gap: SPACING.md }}>
+                <TouchableOpacity onPress={() => router.back()} style={{ minWidth: 44, minHeight: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' }}>
+                    <Ionicons name="arrow-back" size={22} color={COLORS.textPrimary} />
                 </TouchableOpacity>
-                <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 18, color: '#111827', flex: 1 }}>
-                    Chat History
-                </Text>
+                <Text style={[TYPOGRAPHY.heading, { color: COLORS.textPrimary, flex: 1 }]}>Chat History</Text>
             </View>
 
-            {/* ── Content ── */}
             {isLoading ? (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                    <ActivityIndicator size="large" color="#4F46E5" />
+                    <ActivityIndicator size="large" color={COLORS.primary} />
                 </View>
             ) : !sessions || sessions.length === 0 ? (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 40 }}>
-                    <View
-                        style={{
-                            width: 64,
-                            height: 64,
-                            borderRadius: 32,
-                            backgroundColor: '#EEF2FF',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            marginBottom: 16,
-                        }}
-                    >
-                        <Ionicons name="chatbubbles-outline" size={28} color="#4F46E5" />
+                    <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: COLORS.primaryFixed, alignItems: 'center', justifyContent: 'center', marginBottom: SPACING.lg }}>
+                        <Ionicons name="chatbubbles-outline" size={28} color={COLORS.primary} />
                     </View>
-                    <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 18, color: '#111827', marginBottom: 6 }}>
-                        No conversations yet
-                    </Text>
-                    <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 14, color: '#6B7280', textAlign: 'center', lineHeight: 20 }}>
+                    <Text style={[TYPOGRAPHY.heading, { color: COLORS.textPrimary, marginBottom: 6 }]}>No conversations yet</Text>
+                    <Text style={[TYPOGRAPHY.body, { color: COLORS.textSecondary, textAlign: 'center' }]}>
                         Start a new chat with your AI Decision Advisor to see your conversation history here.
                     </Text>
-                    <TouchableOpacity
-                        onPress={() => router.push('/(tabs)/ai')}
-                        activeOpacity={0.85}
-                        style={{
-                            marginTop: 20,
-                            backgroundColor: '#4F46E5',
-                            borderRadius: 12,
-                            paddingHorizontal: 24,
-                            paddingVertical: 12,
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            gap: 6,
-                        }}
-                    >
-                        <Ionicons name="add-circle-outline" size={18} color="#FFFFFF" />
-                        <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 14, color: '#FFFFFF' }}>Start Chat</Text>
+                    <TouchableOpacity onPress={() => router.push('/(tabs)/ai')} activeOpacity={0.85} style={{ marginTop: SPACING.xl, backgroundColor: COLORS.primary, borderRadius: RADII.md, paddingHorizontal: SPACING.xxl, paddingVertical: SPACING.md, flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                        <Ionicons name="add-circle-outline" size={18} color={COLORS.textOnPrimary} />
+                        <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 14, color: COLORS.textOnPrimary }}>Start Chat</Text>
                     </TouchableOpacity>
                 </View>
             ) : (
@@ -165,7 +105,7 @@ export default function AiHistoryScreen() {
                     data={sessions}
                     keyExtractor={(item) => item.id}
                     renderItem={renderSession}
-                    contentContainerStyle={{ paddingTop: 16, paddingBottom: 40 }}
+                    contentContainerStyle={{ paddingTop: SPACING.lg, paddingBottom: 40 }}
                     showsVerticalScrollIndicator={false}
                     onRefresh={refetch}
                     refreshing={isLoading}
@@ -185,7 +125,6 @@ function getRelativeTime(dateStr: string): string {
         const diffMins = Math.floor(diffMs / 60000);
         const diffHours = Math.floor(diffMs / 3600000);
         const diffDays = Math.floor(diffMs / 86400000);
-
         if (diffMins < 1) return 'Just now';
         if (diffMins < 60) return `${diffMins}m ago`;
         if (diffHours < 24) return `${diffHours}h ago`;

@@ -60,3 +60,7 @@ export const MOTIVATIONAL_QUOTES = [
     'The quality of your decisions shapes the quality of your life.',
     'Precision is the sanctuary of the wise.',
 ];
+
+export function getRandomQuote(): string {
+    return MOTIVATIONAL_QUOTES[Math.floor(Math.random() * MOTIVATIONAL_QUOTES.length)];
+}

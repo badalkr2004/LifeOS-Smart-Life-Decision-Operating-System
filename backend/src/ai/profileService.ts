@@ -244,7 +244,7 @@ export async function computeUserProfile(userId: string): Promise<void> {
         model: models.background,
         system: SYSTEM_PROMPTS.profileSummary,
         prompt: `Raw profile data:\n${JSON.stringify(profile, null, 2)}`,
-        maxTokens: 400,
+        maxOutputTokens: 400,
       });
       if (result.text && result.text.length > 50) {
         textSummary = result.text;

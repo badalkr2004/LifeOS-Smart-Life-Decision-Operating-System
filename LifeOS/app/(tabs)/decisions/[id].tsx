@@ -5,7 +5,7 @@
  * delegates rendering to InfoCard, OutcomeTimelineItem, ConfidenceRing, etc.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import {
     View,
     Text,
@@ -13,8 +13,11 @@ import {
     TouchableOpacity,
     StatusBar,
     Alert,
+    Modal,
+    Pressable,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useDecision, useDecisionOutcomes, useDeleteDecision, useUpdateDecision } from '@/hooks/useDecisions';
@@ -27,20 +30,32 @@ import {
 } from '@/components/decisions';
 import {
     getCategoryColor,
+    getCategoryBg,
     getStatusColor,
+    getStatusLabel,
     getConfidenceText,
 } from '@/utils/helpers';
+import { COLORS, SPACING, RADII, SHADOWS, TYPOGRAPHY } from '@/utils/designTokens';
 
 export default function DecisionDetailScreen() {
     const router = useRouter();
+    const insets = useSafeAreaInsets();
     const { id } = useLocalSearchParams<{ id: string }>();
     const [activeTab, setActiveTab] = useState<'context' | 'outcomes'>('context');
     const [showMenu, setShowMenu] = useState(false);
+    const [menuPosition, setMenuPosition] = useState({ top: 0, right: 20 });
+    const kebabRef = useRef<View>(null);
 
-    const { data: decision, isLoading } = useDecision(id!);
+    const { data: decision, isLoading, isError, refetch } = useDecision(id!);
     const { data: outcomes = [], isLoading: outcomesLoading } = useDecisionOutcomes(id!);
     const deleteMutation = useDeleteDecision();
     const updateMutation = useUpdateDecision();
+
+    const measureKebab = useCallback(() => {
+        kebabRef.current?.measureInWindow((x, y, width, height) => {
+            setMenuPosition({ top: y + height + 4, right: 20 });
+        });
+    }, []);
 
     const handleDelete = () => {
         Alert.alert(
@@ -91,19 +106,41 @@ export default function DecisionDetailScreen() {
     };
 
     const handleAnalyzeAI = () => {
+        setShowMenu(false);
         router.push(`/(tabs)/ai?decisionId=${id}`);
     };
+
+    // ── Error state ──
+    if (isError && !isLoading) {
+        return (
+            <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.surface }}>
+                <StatusBar barStyle="dark-content" backgroundColor={COLORS.surface} />
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: SPACING.xxl }}>
+                    <Ionicons name="alert-circle-outline" size={48} color={COLORS.danger} />
+                    <Text style={[TYPOGRAPHY.heading, { color: COLORS.textPrimary, marginTop: SPACING.md, textAlign: 'center' }]}>
+                        Failed to load decision
+                    </Text>
+                    <TouchableOpacity
+                        onPress={() => refetch()}
+                        style={{ marginTop: SPACING.lg, backgroundColor: COLORS.primary, borderRadius: RADII.md, paddingHorizontal: SPACING.xxl, paddingVertical: SPACING.md }}
+                    >
+                        <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 14, color: COLORS.textOnPrimary }}>Retry</Text>
+                    </TouchableOpacity>
+                </View>
+            </SafeAreaView>
+        );
+    }
 
     // ── Loading state ──
     if (isLoading || !decision) {
         return (
-            <SafeAreaView style={{ flex: 1, backgroundColor: '#F9FAFB' }}>
-                <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
-                <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 }}>
-                    <TouchableOpacity onPress={() => router.back()} style={{ padding: 8 }}>
-                        <Ionicons name="arrow-back" size={24} color="#111827" />
+            <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.surface }}>
+                <StatusBar barStyle="dark-content" backgroundColor={COLORS.surface} />
+                <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: SPACING.lg, paddingVertical: SPACING.md }}>
+                    <TouchableOpacity onPress={() => router.back()} style={{ padding: SPACING.sm }}>
+                        <Ionicons name="arrow-back" size={24} color={COLORS.textPrimary} />
                     </TouchableOpacity>
-                    <Text style={{ flex: 1, fontFamily: 'Inter_700Bold', fontSize: 17, color: '#111827', textAlign: 'center' }}>Decision Detail</Text>
+                    <Text style={[TYPOGRAPHY.heading, { flex: 1, color: COLORS.textPrimary, textAlign: 'center' }]}>Decision Detail</Text>
                     <View style={{ width: 40 }} />
                 </View>
                 <DetailSkeleton />
@@ -112,76 +149,95 @@ export default function DecisionDetailScreen() {
     }
 
     const catColor = getCategoryColor(decision.category);
+    const catBg = getCategoryBg(decision.category);
     const statusColor = getStatusColor(decision.status);
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#F9FAFB' }}>
-            <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
+        <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.surface }}>
+            <StatusBar barStyle="dark-content" backgroundColor={COLORS.surface} />
 
             {/* ── Header ── */}
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 12 }}>
-                <TouchableOpacity onPress={() => router.back()} style={{ padding: 8 }}>
-                    <Ionicons name="arrow-back" size={24} color="#111827" />
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: SPACING.lg, paddingVertical: SPACING.md }}>
+                <TouchableOpacity onPress={() => router.back()} style={{ padding: SPACING.sm }} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+                    <Ionicons name="arrow-back" size={24} color={COLORS.textPrimary} />
                 </TouchableOpacity>
-                <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 17, color: '#111827' }}>Decision Detail</Text>
-                <TouchableOpacity onPress={() => setShowMenu(!showMenu)} style={{ padding: 8 }}>
-                    <Ionicons name="ellipsis-vertical" size={20} color="#464555" />
+                <Text style={[TYPOGRAPHY.heading, { color: COLORS.textPrimary }]}>Decision Detail</Text>
+                <TouchableOpacity
+                    ref={kebabRef}
+                    onPress={() => { measureKebab(); setShowMenu(!showMenu); }}
+                    style={{ padding: SPACING.sm }}
+                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                >
+                    <Ionicons name="ellipsis-vertical" size={20} color={COLORS.textMuted} />
                 </TouchableOpacity>
             </View>
 
-            {/* ── Dropdown Menu ── */}
-            {showMenu && (
-                <View style={{ position: 'absolute', top: 100, right: 20, backgroundColor: '#FFFFFF', borderRadius: 14, padding: 6, zIndex: 100, shadowColor: '#000', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.12, shadowRadius: 20, elevation: 10, minWidth: 190 }}>
-                    <TouchableOpacity onPress={handleEdit} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, padding: 12, borderRadius: 10 }}>
-                        <Ionicons name="create-outline" size={18} color="#4F46E5" />
-                        <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 14, color: '#111827' }}>Edit Decision</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={handleCheckin} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, padding: 12, borderRadius: 10 }}>
-                        <Ionicons name="checkbox-outline" size={18} color="#10B981" />
-                        <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 14, color: '#111827' }}>Record Check-in</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { setShowMenu(false); handleAnalyzeAI(); }} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, padding: 12, borderRadius: 10 }}>
-                        <Ionicons name="sparkles-outline" size={18} color="#7C3AED" />
-                        <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 14, color: '#111827' }}>Analyze with AI</Text>
-                    </TouchableOpacity>
-                    {decision.status === 'active' ? (
-                        <TouchableOpacity onPress={() => handleStatusChange('archived')} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, padding: 12, borderRadius: 10 }}>
-                            <Ionicons name="archive-outline" size={18} color="#F59E0B" />
-                            <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 14, color: '#111827' }}>Archive</Text>
+            {/* ── Dropdown Menu (Modal overlay) ── */}
+            <Modal visible={showMenu} transparent animationType="fade" onRequestClose={() => setShowMenu(false)}>
+                <Pressable style={{ flex: 1 }} onPress={() => setShowMenu(false)}>
+                    <View
+                        style={{
+                            position: 'absolute',
+                            top: menuPosition.top,
+                            right: menuPosition.right,
+                            backgroundColor: COLORS.surfaceLowest,
+                            borderRadius: RADII.md,
+                            padding: 6,
+                            minWidth: 190,
+                            ...SHADOWS.fab,
+                        }}
+                    >
+                        <TouchableOpacity onPress={handleEdit} style={{ flexDirection: 'row', alignItems: 'center', gap: SPACING.sm, padding: SPACING.md, borderRadius: 10 }}>
+                            <Ionicons name="create-outline" size={18} color={COLORS.primary} />
+                            <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 14, color: COLORS.textPrimary }}>Edit Decision</Text>
                         </TouchableOpacity>
-                    ) : (
-                        <TouchableOpacity onPress={() => handleStatusChange('active')} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, padding: 12, borderRadius: 10 }}>
-                            <Ionicons name="refresh-outline" size={18} color="#10B981" />
-                            <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 14, color: '#111827' }}>Reactivate</Text>
+                        <TouchableOpacity onPress={handleCheckin} style={{ flexDirection: 'row', alignItems: 'center', gap: SPACING.sm, padding: SPACING.md, borderRadius: 10 }}>
+                            <Ionicons name="checkbox-outline" size={18} color={COLORS.success} />
+                            <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 14, color: COLORS.textPrimary }}>Record Check-in</Text>
                         </TouchableOpacity>
-                    )}
-                    <View style={{ height: 1, backgroundColor: '#F3F4F6', marginHorizontal: 8, marginVertical: 4 }} />
-                    <TouchableOpacity onPress={() => { setShowMenu(false); handleDelete(); }} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, padding: 12, borderRadius: 10 }}>
-                        <Ionicons name="trash-outline" size={18} color="#EF4444" />
-                        <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 14, color: '#EF4444' }}>Delete</Text>
-                    </TouchableOpacity>
-                </View>
-            )}
+                        <TouchableOpacity onPress={() => { setShowMenu(false); handleAnalyzeAI(); }} style={{ flexDirection: 'row', alignItems: 'center', gap: SPACING.sm, padding: SPACING.md, borderRadius: 10 }}>
+                            <Ionicons name="sparkles-outline" size={18} color="#7C3AED" />
+                            <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 14, color: COLORS.textPrimary }}>Analyze with AI</Text>
+                        </TouchableOpacity>
+                        {decision.status === 'active' ? (
+                            <TouchableOpacity onPress={() => handleStatusChange('archived')} style={{ flexDirection: 'row', alignItems: 'center', gap: SPACING.sm, padding: SPACING.md, borderRadius: 10 }}>
+                                <Ionicons name="archive-outline" size={18} color={COLORS.warning} />
+                                <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 14, color: COLORS.textPrimary }}>Archive</Text>
+                            </TouchableOpacity>
+                        ) : (
+                            <TouchableOpacity onPress={() => handleStatusChange('active')} style={{ flexDirection: 'row', alignItems: 'center', gap: SPACING.sm, padding: SPACING.md, borderRadius: 10 }}>
+                                <Ionicons name="refresh-outline" size={18} color={COLORS.success} />
+                                <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 14, color: COLORS.textPrimary }}>Reactivate</Text>
+                            </TouchableOpacity>
+                        )}
+                        <View style={{ height: 1, backgroundColor: COLORS.surfaceLow, marginHorizontal: SPACING.sm, marginVertical: SPACING.xs }} />
+                        <TouchableOpacity onPress={() => { setShowMenu(false); handleDelete(); }} style={{ flexDirection: 'row', alignItems: 'center', gap: SPACING.sm, padding: SPACING.md, borderRadius: 10 }}>
+                            <Ionicons name="trash-outline" size={18} color={COLORS.danger} />
+                            <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 14, color: COLORS.danger }}>Delete</Text>
+                        </TouchableOpacity>
+                    </View>
+                </Pressable>
+            </Modal>
 
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }} onScrollBeginDrag={() => showMenu && setShowMenu(false)}>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: insets.bottom + SPACING.xxl }} onScrollBeginDrag={() => showMenu && setShowMenu(false)} scrollEnabled={true}>
                 {/* ── Badges ── */}
-                <View style={{ flexDirection: 'row', gap: 8, paddingHorizontal: 24, marginBottom: 12, marginTop: 4 }}>
-                    <View style={{ backgroundColor: catColor + '18', borderRadius: 8, paddingHorizontal: 12, paddingVertical: 5 }}>
+                <View style={{ flexDirection: 'row', gap: SPACING.sm, paddingHorizontal: SPACING.xxl, marginBottom: SPACING.md, marginTop: SPACING.xs }}>
+                    <View style={{ backgroundColor: catBg, borderRadius: RADII.sm, paddingHorizontal: SPACING.md, paddingVertical: 5 }}>
                         <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 11, color: catColor, textTransform: 'uppercase', letterSpacing: 0.8 }}>{decision.category}</Text>
                     </View>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: statusColor + '18', borderRadius: 8, paddingHorizontal: 12, paddingVertical: 5 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: statusColor + '18', borderRadius: RADII.sm, paddingHorizontal: SPACING.md, paddingVertical: 5 }}>
                         <View style={{ width: 7, height: 7, borderRadius: 3.5, backgroundColor: statusColor }} />
-                        <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 11, color: statusColor, textTransform: 'uppercase', letterSpacing: 0.8 }}>{decision.status}</Text>
+                        <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 11, color: statusColor, textTransform: 'uppercase', letterSpacing: 0.8 }}>{getStatusLabel(decision.status)}</Text>
                     </View>
                 </View>
 
                 {/* ── Title ── */}
-                <View style={{ paddingHorizontal: 24, marginBottom: 20 }}>
-                    <Text style={{ fontFamily: 'Inter_800ExtraBold', fontSize: 28, color: '#111827', letterSpacing: -1, lineHeight: 34 }}>{decision.title}</Text>
+                <View style={{ paddingHorizontal: SPACING.xxl, marginBottom: SPACING.xl }}>
+                    <Text style={{ fontFamily: 'Inter_800ExtraBold', fontSize: 28, color: COLORS.textPrimary, letterSpacing: -1, lineHeight: 34 }} numberOfLines={3}>{decision.title}</Text>
                 </View>
 
                 {/* ── Segmented Control ── */}
-                <View style={{ flexDirection: 'row', marginHorizontal: 24, marginBottom: 24, borderRadius: 12, backgroundColor: '#F3F4F6', padding: 4 }}>
+                <View style={{ flexDirection: 'row', marginHorizontal: SPACING.xxl, marginBottom: SPACING.xxl, borderRadius: RADII.md, backgroundColor: COLORS.surfaceDim, padding: 4 }}>
                     {(['context', 'outcomes'] as const).map((tab) => {
                         const isActive = activeTab === tab;
                         return (
@@ -193,16 +249,12 @@ export default function DecisionDetailScreen() {
                                     flex: 1,
                                     paddingVertical: 10,
                                     borderRadius: 10,
-                                    backgroundColor: isActive ? '#FFFFFF' : 'transparent',
-                                    shadowColor: isActive ? 'rgba(0,0,0,0.5)' : 'transparent',
-                                    shadowOffset: { width: 0, height: 1 },
-                                    shadowOpacity: isActive ? 0.05 : 0,
-                                    shadowRadius: 4,
-                                    elevation: isActive ? 1 : 0,
+                                    backgroundColor: isActive ? COLORS.surfaceLowest : 'transparent',
+                                    ...(isActive ? { shadowColor: 'rgba(0,0,0,0.5)', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 4, elevation: 1 } : {}),
                                     alignItems: 'center',
                                 }}
                             >
-                                <Text style={{ fontFamily: isActive ? 'Inter_700Bold' : 'Inter_500Medium', fontSize: 14, color: isActive ? '#111827' : '#6B7280' }}>
+                                <Text style={{ fontFamily: isActive ? 'Inter_700Bold' : 'Inter_500Medium', fontSize: 14, color: isActive ? COLORS.textPrimary : COLORS.textSecondary }}>
                                     {tab === 'context' ? 'Context' : 'Outcomes'}
                                 </Text>
                             </TouchableOpacity>
@@ -212,12 +264,12 @@ export default function DecisionDetailScreen() {
 
                 {/* ── Tab Content ── */}
                 {activeTab === 'context' ? (
-                    <View style={{ paddingHorizontal: 24, gap: 16 }}>
+                    <View style={{ paddingHorizontal: SPACING.xxl, gap: SPACING.lg }}>
                         {/* Confidence Card */}
-                        <View style={{ backgroundColor: '#FFFFFF', borderRadius: 20, padding: 24, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', shadowColor: 'rgba(25,28,29,0.8)', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.03, shadowRadius: 12, elevation: 1 }}>
-                            <View style={{ flex: 1, marginRight: 16 }}>
-                                <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 10, color: '#464555', letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 6 }}>Decision Confidence</Text>
-                                <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 16, color: '#111827', lineHeight: 22 }}>{getConfidenceText(decision.confidenceLevel)}</Text>
+                        <View style={{ backgroundColor: COLORS.surfaceLowest, borderRadius: RADII.xl, padding: SPACING.xxl, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', ...SHADOWS.card }}>
+                            <View style={{ flex: 1, marginRight: SPACING.lg }}>
+                                <Text style={[TYPOGRAPHY.caption, { color: COLORS.textMuted, marginBottom: 6 }]}>Decision Confidence</Text>
+                                <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 16, color: COLORS.textPrimary, lineHeight: 22 }}>{getConfidenceText(decision.confidenceLevel)}</Text>
                             </View>
                             <ConfidenceRing value={decision.confidenceLevel} />
                         </View>
@@ -228,19 +280,19 @@ export default function DecisionDetailScreen() {
 
                         {/* Expected Outcomes / Metrics */}
                         {decision.expectedOutcomes && decision.expectedOutcomes.length > 0 ? (
-                            <View style={{ backgroundColor: '#FFFFFF', borderRadius: 20, padding: 20, shadowColor: 'rgba(25,28,29,0.8)', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.03, shadowRadius: 12, elevation: 1 }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-                                    <Ionicons name="stats-chart-outline" size={16} color="#4F46E5" />
-                                    <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 11, color: '#464555', letterSpacing: 1.2, textTransform: 'uppercase' }}>Metrics</Text>
+                            <View style={{ backgroundColor: COLORS.surfaceLowest, borderRadius: RADII.xl, padding: SPACING.xl, ...SHADOWS.card }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: SPACING.sm, marginBottom: SPACING.lg }}>
+                                    <Ionicons name="stats-chart-outline" size={16} color={COLORS.primary} />
+                                    <Text style={[TYPOGRAPHY.caption, { color: COLORS.textMuted }]}>Metrics</Text>
                                 </View>
-                                {decision.expectedOutcomes.map((eo, i) => (
-                                    <View key={i} style={{ marginBottom: i < decision.expectedOutcomes!.length - 1 ? 16 : 0 }}>
+                                {decision.expectedOutcomes.map((eo: any, i: number) => (
+                                    <View key={i} style={{ marginBottom: i < decision.expectedOutcomes!.length - 1 ? SPACING.lg : 0 }}>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                                            <Text style={{ fontFamily: 'Inter_500Medium', fontSize: 14, color: '#374151', textTransform: 'capitalize' }}>{eo.outcome || eo.metric || `Metric ${i + 1}`}</Text>
-                                            <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 14, color: '#111827' }}>{eo.targetValue != null ? eo.targetValue : `${eo.importance ?? 0}/5`}</Text>
+                                            <Text style={{ fontFamily: 'Inter_500Medium', fontSize: 14, color: COLORS.textBody, textTransform: 'capitalize' }} numberOfLines={1}>{eo.outcome || eo.metric || `Metric ${i + 1}`}</Text>
+                                            <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 14, color: COLORS.textPrimary }}>{eo.targetValue != null ? eo.targetValue : `${eo.importance ?? 0}/5`}</Text>
                                         </View>
-                                        <View style={{ height: 6, backgroundColor: '#E5E7EB', borderRadius: 3 }}>
-                                            <View style={{ height: 6, borderRadius: 3, backgroundColor: '#4F46E5', width: `${Math.min(((eo.importance ?? 3) / 5) * 100, 100)}%` }} />
+                                        <View style={{ height: 6, backgroundColor: COLORS.surfaceDim, borderRadius: 3 }}>
+                                            <View style={{ height: 6, borderRadius: 3, backgroundColor: COLORS.primary, width: `${Math.min(((eo.importance ?? 3) / 5) * 100, 100)}%` }} />
                                         </View>
                                     </View>
                                 ))}
@@ -249,15 +301,15 @@ export default function DecisionDetailScreen() {
 
                         {/* Alternatives */}
                         {decision.alternativesConsidered && decision.alternativesConsidered.length > 0 ? (
-                            <View style={{ backgroundColor: '#FFFFFF', borderRadius: 20, padding: 20, shadowColor: 'rgba(25,28,29,0.8)', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.03, shadowRadius: 12, elevation: 1 }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 14 }}>
-                                    <Ionicons name="git-branch-outline" size={16} color="#4F46E5" />
-                                    <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 11, color: '#464555', letterSpacing: 1.2, textTransform: 'uppercase' }}>Alternatives</Text>
+                            <View style={{ backgroundColor: COLORS.surfaceLowest, borderRadius: RADII.xl, padding: SPACING.xl, ...SHADOWS.card }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: SPACING.sm, marginBottom: SPACING.md }}>
+                                    <Ionicons name="git-branch-outline" size={16} color={COLORS.primary} />
+                                    <Text style={[TYPOGRAPHY.caption, { color: COLORS.textMuted }]}>Alternatives</Text>
                                 </View>
-                                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-                                    {decision.alternativesConsidered.map((alt, i) => (
-                                        <View key={i} style={{ backgroundColor: '#F3F4F6', borderRadius: 10, paddingHorizontal: 14, paddingVertical: 8 }}>
-                                            <Text style={{ fontFamily: 'Inter_500Medium', fontSize: 13, color: '#374151' }}>{alt.option}</Text>
+                                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: SPACING.sm }}>
+                                    {decision.alternativesConsidered.map((alt: any, i: number) => (
+                                        <View key={i} style={{ backgroundColor: COLORS.surfaceLow, borderRadius: 10, paddingHorizontal: SPACING.md, paddingVertical: SPACING.sm }}>
+                                            <Text style={{ fontFamily: 'Inter_500Medium', fontSize: 13, color: COLORS.textBody }}>{alt.option}</Text>
                                         </View>
                                     ))}
                                 </View>
@@ -266,10 +318,10 @@ export default function DecisionDetailScreen() {
 
                         {/* Tags */}
                         {decision.tags && decision.tags.length > 0 ? (
-                            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-                                {decision.tags.map((tag, i) => (
-                                    <View key={i} style={{ backgroundColor: '#E8E6FF', borderRadius: 8, paddingHorizontal: 12, paddingVertical: 5 }}>
-                                        <Text style={{ fontFamily: 'Inter_500Medium', fontSize: 12, color: '#4F46E5' }}>#{tag}</Text>
+                            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: SPACING.sm }}>
+                                {decision.tags.map((tag: string, i: number) => (
+                                    <View key={i} style={{ backgroundColor: COLORS.primarySurface, borderRadius: RADII.sm, paddingHorizontal: SPACING.md, paddingVertical: 5 }}>
+                                        <Text style={{ fontFamily: 'Inter_500Medium', fontSize: 12, color: COLORS.primary }}>#{tag}</Text>
                                     </View>
                                 ))}
                             </View>
@@ -277,20 +329,20 @@ export default function DecisionDetailScreen() {
                     </View>
                 ) : (
                     /* ── Outcomes Tab ── */
-                    <View style={{ paddingHorizontal: 24 }}>
+                    <View style={{ paddingHorizontal: SPACING.xxl }}>
                         {outcomesLoading ? (
-                            <View style={{ gap: 12 }}>
+                            <View style={{ gap: SPACING.md }}>
                                 {[1, 2, 3].map((i) => (
-                                    <SkeletonBlock key={i} width="100%" height={100} radius={16} />
+                                    <SkeletonBlock key={i} width="100%" height={100} radius={RADII.lg} />
                                 ))}
                             </View>
                         ) : outcomes.length === 0 ? (
-                            <View style={{ backgroundColor: '#FFFFFF', borderRadius: 20, padding: 32, alignItems: 'center' }}>
-                                <View style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: '#F3F4F6', alignItems: 'center', justifyContent: 'center', marginBottom: 14 }}>
-                                    <Ionicons name="time-outline" size={28} color="#C7C4D8" />
+                            <View style={{ backgroundColor: COLORS.surfaceLowest, borderRadius: RADII.xl, padding: SPACING.xxxl, alignItems: 'center' }}>
+                                <View style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: COLORS.surfaceLow, alignItems: 'center', justifyContent: 'center', marginBottom: SPACING.md }}>
+                                    <Ionicons name="time-outline" size={28} color={COLORS.outlineVariant} />
                                 </View>
-                                <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 16, color: '#111827', marginBottom: 6 }}>No outcomes yet</Text>
-                                <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 14, color: '#6B7280', textAlign: 'center', lineHeight: 20 }}>
+                                <Text style={[TYPOGRAPHY.heading, { color: COLORS.textPrimary, marginBottom: 6 }]}>No outcomes yet</Text>
+                                <Text style={[TYPOGRAPHY.body, { color: COLORS.textSecondary, textAlign: 'center' }]}>
                                     Check-in outcomes will appear here once you record them.
                                 </Text>
                             </View>
@@ -301,25 +353,53 @@ export default function DecisionDetailScreen() {
                         )}
                     </View>
                 )}
-            </ScrollView>
 
-            {/* ── Bottom CTAs ── */}
-            <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, paddingHorizontal: 24, paddingBottom: 32, paddingTop: 16, backgroundColor: '#F9FAFB', gap: 10 }}>
+                {/* ── Bottom CTAs ── */}
+                <View style={{ paddingHorizontal: SPACING.xxl, paddingTop: SPACING.xl, gap: SPACING.md }}>
                 {decision.status === 'active' && (
-                    <TouchableOpacity onPress={handleCheckin} activeOpacity={0.85}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: '#4F46E5', borderRadius: 14, paddingVertical: 15, shadowColor: '#4F46E5', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2, shadowRadius: 10, elevation: 4 }}>
-                            <Ionicons name="checkbox-outline" size={18} color="#FFFFFF" />
-                            <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 15, color: '#FFFFFF' }}>Record Check-in</Text>
-                        </View>
+                    <TouchableOpacity onPress={handleCheckin} activeOpacity={0.85} accessibilityLabel="Record check-in" accessibilityRole="button">
+                        <LinearGradient
+                            colors={['#3525CD', '#4F46E5']}
+                            start={{ x: 0, y: 0 }}
+                            end={{ x: 1, y: 1 }}
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: SPACING.sm,
+                                paddingVertical: 16,
+                                borderRadius: RADII.md,
+                                shadowColor: '#4F46E5',
+                                shadowOffset: { width: 0, height: 6 },
+                                shadowOpacity: 0.3,
+                                shadowRadius: 12,
+                                elevation: 6,
+                            }}
+                        >
+                            <Ionicons name="checkbox-outline" size={18} color={COLORS.textOnPrimary} />
+                            <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 16, color: COLORS.textOnPrimary }}>Record Check-in</Text>
+                        </LinearGradient>
                     </TouchableOpacity>
                 )}
-                <TouchableOpacity onPress={handleAnalyzeAI} activeOpacity={0.85}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: '#FFFFFF', borderWidth: 1.5, borderColor: '#E1E3E4', borderRadius: 14, paddingVertical: 15, shadowColor: 'rgba(0,0,0,0.5)', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.04, shadowRadius: 8, elevation: 1 }}>
-                        <Ionicons name="sparkles" size={18} color="#4F46E5" />
-                        <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 15, color: '#111827' }}>Analyze with AI</Text>
+                <TouchableOpacity onPress={handleAnalyzeAI} activeOpacity={0.85} accessibilityLabel="Analyze with AI" accessibilityRole="button">
+                    <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: SPACING.sm,
+                        paddingVertical: 16,
+                        borderRadius: RADII.md,
+                        backgroundColor: COLORS.surfaceLowest,
+                        borderWidth: 1.5,
+                        borderColor: COLORS.outlineVariant,
+                        ...SHADOWS.card,
+                    }}>
+                        <Ionicons name="sparkles" size={18} color={COLORS.primary} />
+                        <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 16, color: COLORS.textPrimary }}>Analyze with AI</Text>
                     </View>
                 </TouchableOpacity>
             </View>
+            </ScrollView>
         </SafeAreaView>
     );
 }

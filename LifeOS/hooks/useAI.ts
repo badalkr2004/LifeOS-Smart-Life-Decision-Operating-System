@@ -15,6 +15,9 @@ export function usePreDecisionAnalysis() {
   return useMutation({
     mutationFn: (payload: AnalysisPayload) =>
       aiService.preDecisionAnalysis(payload),
+    onError: (error) => {
+      console.error("Pre-decision analysis failed:", error);
+    },
   });
 }
 
@@ -33,6 +36,7 @@ export function useChatHistory(sessionId: string) {
     queryKey: AI_KEYS.session(sessionId),
     queryFn: () => aiService.getChatHistory(sessionId),
     enabled: !!sessionId,
+    retry: 2,
   });
 }
 
@@ -46,6 +50,9 @@ export function useInvalidateSessions() {
 export function useComputeProfile() {
   return useMutation({
     mutationFn: () => aiService.computeProfile(),
+    onError: (error) => {
+      console.error("Profile computation failed:", error);
+    },
   });
 }
 
@@ -56,6 +63,7 @@ export function usePatterns() {
     queryKey: AI_KEYS.patterns,
     queryFn: () => aiService.getPatterns(),
     staleTime: 60_000,
+    retry: 2,
   });
 }
 
@@ -64,8 +72,10 @@ export function useDetectPatterns() {
   return useMutation({
     mutationFn: () => aiService.detectPatterns(),
     onSuccess: () => {
-      // Invalidate patterns cache after detection
       queryClient.invalidateQueries({ queryKey: AI_KEYS.patterns });
+    },
+    onError: (error) => {
+      console.error("Pattern detection failed:", error);
     },
   });
 }
