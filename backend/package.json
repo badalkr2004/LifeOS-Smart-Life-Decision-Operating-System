@@ -7,7 +7,7 @@
     "dev": "npx tsx watch src/index.ts",
     "db:generate": "drizzle-kit generate --config drizzle.config.ts",
     "db:migrate": "drizzle-kit migrate --config drizzle.config.ts",
-    "build:lambda": "esbuild src/lambda.ts --bundle --platform=node --target=node22 --format=cjs --outfile=dist/lambda.cjs --log-level=info"
+    "build:lambda": "esbuild src/lambda.ts --bundle --platform=node --target=node24 --format=cjs --outfile=dist/lambda.cjs --log-level=info"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -41,3 +41,4 @@
     "zod": "^4.3.6"
   }
 }
+
