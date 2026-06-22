@@ -223,10 +223,10 @@ Stop and verify: GitHub should show the new workflow under the `Actions` tab.
 5. Select branch `main`.
 6. Run it.
 
-Watch the logs. The workflow should do these steps:
+Watch the logs. The workflow uses Node 24 for the build and deploys the Lambda function with the `nodejs24.x` runtime. It should do these steps:
 
 - Checkout
-- Setup Node
+- Setup Node 24
 - Install backend dependencies
 - Build Lambda bundle
 - Create deployment zip
@@ -381,3 +381,4 @@ Before calling the POC deployed, confirm:
 - `/health` returns `status: ok`.
 - Mobile app points to the Function URL.
 - You know how to delete the Lambda resources if needed.
+

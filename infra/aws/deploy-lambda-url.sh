@@ -12,7 +12,7 @@ set -euo pipefail
 ROLE_NAME="${FUNCTION_NAME}-lambda-role"
 POLICY_ARN="arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 HANDLER="lambda.handler"
-RUNTIME="nodejs22.x"
+RUNTIME="nodejs24.x"
 ARCHITECTURE="arm64"
 
 if [ ! -f "$ZIP_FILE" ]; then

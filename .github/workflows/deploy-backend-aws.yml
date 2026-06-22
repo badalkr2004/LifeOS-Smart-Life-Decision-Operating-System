@@ -17,14 +17,12 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: backend/package-lock.json
+          node-version: 24
 
       - name: Install backend dependencies
         working-directory: backend
@@ -39,7 +37,7 @@ jobs:
         run: zip -9 lambda.zip lambda.cjs
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -55,3 +53,4 @@ jobs:
           CORS_ALLOW_ORIGIN: ${{ vars.CORS_ALLOW_ORIGIN || '*' }}
           RESERVED_CONCURRENCY: ${{ vars.RESERVED_CONCURRENCY || '2' }}
         run: bash infra/aws/deploy-lambda-url.sh
+
