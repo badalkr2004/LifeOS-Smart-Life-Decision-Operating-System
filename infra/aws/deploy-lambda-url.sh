@@ -13,7 +13,6 @@ ROLE_NAME="${FUNCTION_NAME}-lambda-role"
 POLICY_ARN="arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 HANDLER="lambda.handler"
 RUNTIME="nodejs24.x"
-ARCHITECTURE="arm64"
 
 if [ ! -f "$ZIP_FILE" ]; then
   echo "Deployment package not found: $ZIP_FILE" >&2
@@ -75,7 +74,6 @@ if aws lambda get-function --function-name "$FUNCTION_NAME" --region "$AWS_REGIO
     --function-name "$FUNCTION_NAME" \
     --runtime "$RUNTIME" \
     --handler "$HANDLER" \
-    --architectures "$ARCHITECTURE" \
     --memory-size 256 \
     --timeout 20 \
     --environment "file://${ENV_FILE}" \
@@ -86,7 +84,6 @@ else
     --runtime "$RUNTIME" \
     --role "$ROLE_ARN" \
     --handler "$HANDLER" \
-    --architectures "$ARCHITECTURE" \
     --memory-size 256 \
     --timeout 20 \
     --zip-file "fileb://${ZIP_FILE}" \
