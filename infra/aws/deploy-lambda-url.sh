@@ -119,13 +119,18 @@ else
     --region "$AWS_REGION" >/dev/null
 fi
 
+aws lambda remove-permission \
+  --function-name "$FUNCTION_NAME" \
+  --statement-id FunctionUrlPublicAccess \
+  --region "$AWS_REGION" >/dev/null 2>&1 || true
+
 aws lambda add-permission \
   --function-name "$FUNCTION_NAME" \
   --statement-id FunctionUrlPublicAccess \
   --action lambda:InvokeFunctionUrl \
   --principal "*" \
   --function-url-auth-type NONE \
-  --region "$AWS_REGION" >/dev/null 2>&1 || true
+  --region "$AWS_REGION" >/dev/null
 
 LOG_GROUP="/aws/lambda/${FUNCTION_NAME}"
 aws logs create-log-group --log-group-name "$LOG_GROUP" --region "$AWS_REGION" >/dev/null 2>&1 || true

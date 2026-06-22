@@ -339,6 +339,8 @@ Common causes:
 
 This POC uses `auth-type NONE`, so the Function URL is public. Your app routes still need application-level auth where implemented, but `/health` and any unauthenticated routes are internet-accessible.
 
+If `/health` returns `Forbidden`, rerun the deployment workflow after confirming the deploy IAM user can run `lambda:AddPermission` and `lambda:RemovePermission`. The deploy script refreshes the `FunctionUrlPublicAccess` resource-policy statement on each run.
+
 For production, add stronger controls before inviting users.
 
 ## 10. Update The Backend Later
