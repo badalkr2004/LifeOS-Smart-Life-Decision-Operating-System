@@ -5,7 +5,8 @@ import { useAuthStore } from "@/store/authStore";
 // ─── Base client ──────────────────────────────────────────────────────────────
 
 export const apiClient = axios.create({
-  baseURL: "http://10.102.179.54:8000/api/v1",
+  baseURL:
+    "https://r2z3a7sivkzpowumc5ogz4ypsa0nvinu.lambda-url.ap-south-1.on.aws/api/v1",
   timeout: 15000,
   headers: {
     "Content-Type": "application/json",
