@@ -124,12 +124,25 @@ aws lambda remove-permission \
   --statement-id FunctionUrlPublicAccess \
   --region "$AWS_REGION" >/dev/null 2>&1 || true
 
+aws lambda remove-permission \
+  --function-name "$FUNCTION_NAME" \
+  --statement-id FunctionUrlInvokeFunctionPublicAccess \
+  --region "$AWS_REGION" >/dev/null 2>&1 || true
+
 aws lambda add-permission \
   --function-name "$FUNCTION_NAME" \
   --statement-id FunctionUrlPublicAccess \
   --action lambda:InvokeFunctionUrl \
   --principal "*" \
   --function-url-auth-type NONE \
+  --region "$AWS_REGION" >/dev/null
+
+aws lambda add-permission \
+  --function-name "$FUNCTION_NAME" \
+  --statement-id FunctionUrlInvokeFunctionPublicAccess \
+  --action lambda:InvokeFunction \
+  --principal "*" \
+  --invoked-via-function-url \
   --region "$AWS_REGION" >/dev/null
 
 LOG_GROUP="/aws/lambda/${FUNCTION_NAME}"
